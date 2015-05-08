@@ -1,0 +1,2406 @@
+NAME "DxDll.dll"
+;LIBRARY "DxDll"
+;DESCRIPTION "モジュール定義ファイル"
+VERSION 3.12;a
+
+EXPORTS
+	; ------------------------------------------------------------
+	;
+	; DxSystem.cpp関数プロトタイプ宣言
+	;
+	; ------------------------------------------------------------
+
+	; ------------------------------
+	; 初期化終了系関数
+	; ------------------------------
+	DxLib_Init						; ライブラリ初期化関数
+	DxLib_End						; ライブラリ使用の終了関数
+
+	DxLib_GlobalStructInitialize	; ライブラリの内部で使用している構造体をゼロ初期化して、DxLib_Init の前に行った設定を無効化する( DxLib_Init の前でのみ有効 )
+	DxLib_IsInit					; ライブラリが初期化されているかどうかを取得する( 戻り値: TRUE=初期化されている  FALSE=されていない )
+
+	; ------------------------------
+	; メッセージ処理関数
+	; ------------------------------
+	ProcessMessage	; ウインドウズのメッセージループに代わる処理を行う
+
+	; ------------------------------
+	; ウエイト系関数
+	; ------------------------------
+	WaitTimer	; 指定の時間だけ処理をとめる
+	WaitKey		; キーの入力待ち
+
+	; ------------------------------
+	; カウンタ及び時刻取得系関数
+	; ------------------------------
+	GetNowCount					; ミリ秒単位の精度を持つカウンタの現在値を得る
+	GetNowHiPerformanceCount	; GetNowCountの高精度バージョン
+	GetDateTime					; 現在時刻を取得する 
+
+	; ------------------------------
+	; 乱数取得
+	; ------------------------------
+;	GetRand	; 乱数を取得する( RandMax : 返って来る値の最大値 )
+;	SRand	; 乱数の初期値を設定する
+
+	; ------------------------------------------------------------
+	;
+	; DxLog.cpp関数プロトタイプ宣言
+	;
+	; ------------------------------------------------------------
+
+	; ------------------------------
+	; エラー処理関数
+	; ------------------------------
+	ErrorLogAdd			; エラー文書を書き出す
+	ErrorLogFmtAdd		; 書式付きエラー文書を書き出す
+	ErrorLogTabAdd		; タブ数を増やす
+	ErrorLogTabSub		; タブ数を減らす
+	SetUseTimeStampFlag	; タイムスタンプの有無を設定する
+	AppLogAdd			; 書式付きログ文字列を書き出す
+
+	; ------------------------------
+	; ログ出力機能関数
+	; ------------------------------
+	SetLogDrawOutFlag	; ログ出力フラグをセットする
+	GetLogDrawFlag		; ログ出力をするかフラグの取得
+
+	; ------------------------------
+	; 簡易画面出力関数
+	; ------------------------------
+	printfDx	; 簡易画面出力
+	clsDx		; 簡易画面出力をクリアする
+
+	; ------------------------------------------------------------
+	;
+	; DxASyncLoad.cpp関数プロトタイプ宣言
+	;
+	; ------------------------------------------------------------
+
+	; ------------------------------
+	; 非同期読み込み関係
+	; ------------------------------
+	SetUseASyncLoadFlag			; 読み込み処理系の関数で非同期読み込みを行うかどうかを設定する( 非同期読み込みに対応している関数のみ有効 )( TRUE:非同期読み込みを行う  FALSE:非同期読み込みを行わない( デフォルト ) )
+	CheckHandleASyncLoad		; ハンドルの非同期読み込みが完了しているかどうかを取得する( TRUE:完了している  FALSE:まだ完了していない  -1:エラー )
+	GetHandleASyncLoadResult	; ハンドルの非同期読み込み処理の戻り値を取得する( 非同期読み込み中の場合は一つ前の非同期読み込み処理の戻り値が返ってきます )
+	GetASyncLoadNum				; 非同期読み込み中の処理の数を取得する
+
+	; ------------------------------------------------------------
+	;
+	; DxHandle.cpp関数プロトタイプ宣言
+	;
+	; ------------------------------------------------------------
+
+	SetDeleteHandleFlag	; ハンドルが削除されたときに－１が設定される変数を登録する
+
+
+	; ------------------------------------------------------------
+	;
+	; DxWindow.cpp関数プロトタイプ宣言
+	;
+	; ------------------------------------------------------------
+
+	; ------------------------------
+	; 便利関数
+	; ------------------------------
+	GetResourceInfo		; 指定の名前、タイプのリソースのアドレスとサイズを取得する( 戻り値  -1:失敗  0:成功 )
+	GetResourceIDString	; リソースＩＤからリソースＩＤ文字列を得る 
+
+	; ------------------------------
+	; ウインドウ関係情報取得関数
+	; ------------------------------
+	GetWindowCRect					; ウインドウのクライアント領域を取得する
+	GetWindowActiveFlag				; ウインドウのアクティブフラグを取得
+	GetWindowMinSizeFlag			; メインウインドウが最小化されているかどうかを取得する( 戻り値  TRUE:最小化されている  FALSE:最小化されていない )
+	GetActiveFlag					; ソフトがアクティブかどうかを取得する
+	GetMainWindowHandle				; メインウインドウのハンドルを取得する
+	GetWindowModeFlag				; ウインドウモードで起動しているか、のフラグを取得する
+	GetDefaultState					; 起動時のデスクトップの画面モードを取得する
+	GetNoActiveState				; 非アクティブになり、処理が一時停止していたかどうかを取得する(引数 ResetFlag=TRUE:状態をリセット FALSE:状態をリセットしない    戻り値: 0=一時停止はしていない  1=一時停止していた )
+	GetMouseDispFlag				; マウスを表示するかどうかのフラグを取得する
+	GetAlwaysRunFlag				; ウインドウがアクティブではない状態でも処理を続行するか、フラグを取得する
+	_GetSystemInfo					; ＤＸライブラリと DirectX のバージョンと Windows のバージョンを得る
+	GetPcInfo						; ＰＣの情報を得る
+	GetUseMMXFlag					; ＭＭＸが使えるかどうかの情報を得る
+	GetUseSSEFlag					; ＳＳＥが使えるかどうかの情報を得る
+	GetUseSSE2Flag					; ＳＳＥ２が使えるかどうかの情報を得る
+	GetWindowCloseFlag				; ウインドウを閉じようとしているかの情報を得る
+	GetTaskInstance					; ソフトのインスタンスを取得する
+	GetUseWindowRgnFlag				; リージョンを使っているかどうかを取得する
+	GetWindowSizeChangeEnableFlag	; ウインドウのサイズを変更できるかどうかのフラグを取得する
+	GetWindowSizeExtendRate			; 描画画面のサイズに対するウインドウサイズの比率を取得する( 戻り値は ExRateX に代入される値と同じです )
+	GetWindowSize					; ウインドウモードのウインドウののクライアント領域のサイズを取得する
+	GetWindowPosition				; ウインドウモードのウインドウの位置を取得する( 枠も含めた左上座標 )
+	GetWindowUserCloseFlag			; ウインドウの閉じるボタンが押されたかどうかを取得する
+	GetNotDrawFlag					; 描画機能を使うかどうかのフラグを取得する
+	GetPaintMessageFlag				; WM_PAINT メッセージが来たかどうかを取得する(戻り値  TRUE:WM_PAINTメッセージが来た(一度取得すると以後、再び WM_PAINTメッセージが来るまで FALSE が返ってくるようになる)  FALSE:WM_PAINT メッセージは来ていない)
+	GetValidHiPerformanceCounter	; パフォーマンスカウンタが有効かどうかを取得する(戻り値  TRUE:有効  FALSE:無効)
+
+	; ------------------------------
+	; 設定系関数
+	; ------------------------------
+	ChangeWindowMode								; ウインドウモードを変更する
+	SetUseCharSet									; ＤＸライブラリの文字列処理で前提とする文字列セットを設定する
+	LoadPauseGraph									; アクティブウインドウが他のソフトに移っている際に表示する画像のロード(NULL で解除)
+	LoadPauseGraphFromMem							; アクティブウインドウが他のソフトに移っている際に表示する画像のロード(NULL で解除)
+	SetActiveStateChangeCallBackFunction			; ウインドウのアクティブ状態に変化があったときに呼ばれるコールバック関数をセットする( NULL をセットすると呼ばれなくなる )
+	;;;;;SetWindowText									; メインウインドウのウインドウテキストを変更する
+	SetMainWindowText								; メインウインドウのウインドウテキストを変更する
+	SetMainWindowClassName							; メインウインドウのクラス名を設定する
+	SetOutApplicationLogValidFlag					; ログ出力を行うか否かのセット
+	SetApplicationLogSaveDirectory					; ログファイルを保存するディレクトリパスを設定する
+	SetUseDateNameLogFile							; ログファイル名に日付をつけるかどうかをセットする( TRUE:付ける  FALSE:付けない( デフォルト ) )
+	SetAlwaysRunFlag								; ウインドウがアクティブではない状態でも処理を続行するか、フラグをセットする
+	SetWindowIconID									; 使用するアイコンのＩＤをセットする
+	SetWindowIconHandle								; メインウインドウで使用するアイコンのハンドルをセットする
+	SetUseASyncChangeWindowModeFunction				; 最大化ボタンやALT+ENTERキーによる非同期なウインドウモードの変更の機能の設定を行う
+	SetWindowStyleMode								; ウインドウのスタイルを変更する
+	SetWindowSizeChangeEnableFlag					; ウインドウのサイズを変更できるかどうかのフラグをセットする( NotFitScreen:ウインドウのクライアント領域に画面をフィットさせる(拡大させる)かどうか  TRUE:フィットさせる  FALSE:フィットさせない )
+	SetWindowSizeExtendRate							; 描画画面のサイズに対するウインドウサイズの比率を設定する( ExRateY がマイナスの場合は ExRateX の値が ExRateY にも使用されます )
+	SetWindowSize									; ウインドウモード時のウインドウのクライアント領域のサイズを設定する
+	SetWindowPosition								; ウインドウモードのウインドウの位置を設定する( 枠も含めた左上座標 )
+	SetSysCommandOffFlag							; タスクスイッチを有効にするかどうかを設定する
+	SetHookWinProc									; メッセージをフックするウインドウプロージャを登録する
+	SetUseHookWinProcReturnValue					; 
+	SetDoubleStartValidFlag							; ２重起動を許すかどうかのフラグをセットする
+	AddMessageTakeOverWindow						; メッセージ処理をＤＸライブラリに肩代わりしてもらうウインドウを追加する
+	SubMessageTakeOverWindow						; メッセージ処理をＤＸライブラリに肩代わりしてもらうウインドウを減らす
+
+	SetWindowInitPosition							; ウインドウの初期位置を設定する
+	SetNotWinFlag									; ＤＸライブラリのウインドウ関連の機能を使用しないフラグ
+	SetNotDrawFlag									; 描画機能を使うかどうかのフラグをセットする
+	SetNotSoundFlag									; サウンド機能を使うかどうかのフラグをセットする
+	SetNotInputFlag									; 入力状態の取得機能を使うかどうかのフラグをセットする
+	SetDialogBoxHandle								; ＤＸライブラリでメッセージ処理を行うダイアログボックスを登録する
+	SetWindowVisibleFlag							; メインウインドウを表示するかどうかのフラグをセットする
+	SetWindowMinimizeFlag							; メインウインドウを最小化するかどうかを設定する( TRUE:最小化する  FALSE:最小化を解除 )
+	SetWindowUserCloseEnableFlag					; メインウインドウの×ボタンを押した時にライブラリが自動的にウインドウを閉じるかどうかのフラグをセットする
+	SetDxLibEndPostQuitMessageFlag					; ＤＸライブラリ終了時に PostQuitMessage を呼ぶかどうかのフラグをセットする
+	SetUserWindow									; ＤＸライブラリで利用するウインドウのハンドルをセットする(DxLib_Init を実行する以前でのみ有効)
+	SetUserChildWindow								; ＤＸライブラリで使用する表示用の子ウインドウのハンドルをセットする( DxLib_Init を実行する以前でのみ有効 )
+	SetUserWindowMessageProcessDXLibFlag			; SetUseWindow で設定したウインドウのメッセージループ処理をＤＸライブラリで行うかどうか、フラグをセットする
+	SetBackgroundColor								; メインウインドウのバックグラウンドカラーを設定する
+	SetUseFPUPreserveFlag							; FPUの精度を落とさない設定を使用するかどうかを設定する、DxLib_Init を呼び出す前のみ有効( TRUE:使用する(精度が落ちない)  FALSE:使用しない(精度を落とす(デフォルト) )
+	SetValidMousePointerWindowOutClientAreaMoveFlag	; マウスポインタがウインドウのクライアントエリアの外にいけるかどうかを設定する( TRUE:いける( デフォルト設定 )  FALSE:いけない )
+	SetUseBackBufferTransColorFlag					; バックバッファの透過色の部分を透過させるかどうかを設定する( TRUE:透過させる  FALSE:透過させない )
+	SetResourceModule								; リソースを読み込む際に使用するモジュールを設定する( NULL を指定すると初期状態に戻ります、デフォルトでは NULL )
+
+	; ------------------------------
+	; クリップボード関係
+	; ------------------------------
+	GetClipboardText	; クリップボードに格納されているテキストデータを読み出す、-1 の場合はクリップボードにテキストデータは無いということ( DestBuffer に NULL を渡すと格納に必要なデータサイズが返ってくる )
+	SetClipboardText	; クリップボードにテキストデータを格納する
+
+	; ------------------------------
+	; ドラッグ＆ドロップされたファイル関係
+	; ------------------------------
+	SetDragFileValidFlag	; ファイルのドラッグ＆ドロップ機能を有効にするかどうかのフラグをセットする
+	DragFileInfoClear		; ドラッグ＆ドロップされたファイルの情報を初期化する
+	GetDragFilePath			; ドラッグ＆ドロップされたファイル名を取得する( -1:取得できなかった  0:取得できた )
+	GetDragFileNum			; ドラッグ＆ドロップされたファイルの数を取得する
+
+	; ------------------------------
+	; ウインドウ描画領域設定系関数
+	; ------------------------------
+	CreateRgnFromGraph			; 任意のグラフィックからRGNハンドルを作成する
+	CreateRgnFromBaseImage		; 任意の基本イメージデータと透過色からRGNハンドルを作成する
+	SetWindowRgnGraph			; 任意のグラフィックからＲＧＮをセットする
+	UpdateTransColorWindowRgn	; 描画先の画面の透過色の部分を透過させるＲＧＮをセットする
+
+	; ------------------------------
+	; ツールバー関係
+	; ------------------------------
+	SetupToolBar			; ツールバーの準備( NULL を指定するとツールバーを解除、ResourceID は BitmapName が NULL の際に使用される )
+	AddToolBarButton		; ツールバーにボタンを追加
+	AddToolBarSep			; ツールバーに隙間を追加
+	GetToolBarButtonState	; ツールバーのボタンの状態を取得( TRUE:押されている or 押された  FALSE:押されていない )
+	SetToolBarButtonState	; ツールバーのボタンの状態を設定
+	DeleteAllToolBarButton	; ツールバーのボタンを全て削除
+
+	; ------------------------------
+	; メニュー関係
+	; ------------------------------
+	SetUseMenuFlag						; メニューを有効にするかどうかを設定する
+	SetUseKeyAccelFlag					; キーボードアクセラレーターを使用するかどうかを設定する
+
+	AddKeyAccel							; ショートカットキーを追加する
+	AddKeyAccel_Name					; ショートカットキーを追加する
+	AddKeyAccel_ID						; ショートカットキーを追加する
+	ClearKeyAccel						; ショートカットキーの情報を初期化する
+
+	AddMenuItem							; メニューに項目を追加する
+	DeleteMenuItem						; メニューから選択項目を削除する
+	CheckMenuItemSelect					; メニューが選択されたかどうかを取得する( 0:選択されていない  1:選択された )
+	SetMenuItemEnable					; メニューの項目を選択出来るかどうかを設定する
+	SetMenuItemMark						; メニューの項目にチェックマークやラジオボタンを表示するかどうかを設定する( MENUITEM_MARK_NONE 等 )
+	CheckMenuItemSelectAll				; メニューの項目がどれか選択されたかどうかを取得する( 戻り値  TRUE:どれか選択された  FALSE:選択されていない )
+
+	AddMenuItem_Name					; メニューに選択項目を追加する
+	AddMenuLine_Name					; メニューのリストに区切り線を追加する
+	InsertMenuItem_Name					; 指定の項目と、指定の項目の一つ上の項目との間に新しい項目を追加する
+	InsertMenuLine_Name					; 指定の項目と、指定の項目の一つ上の項目との間に区切り線を追加する
+	DeleteMenuItem_Name					; メニューから選択項目を削除する
+	CheckMenuItemSelect_Name			; メニューが選択されたかどうかを取得する( 0:選択されていない  1:選択された )
+	SetMenuItemEnable_Name				; メニューの項目を選択出来るかどうかを設定する( 1:選択できる  0:選択できない )
+	SetMenuItemMark_Name				; メニューの項目にチェックマークやラジオボタンを表示するかどうかを設定する( MENUITEM_MARK_NONE 等 )
+
+	AddMenuItem_ID						; メニューに選択項目を追加する
+	AddMenuLine_ID						; メニューのリストに区切り線を追加する
+	InsertMenuItem_ID					; 指定の項目と、指定の項目の一つ上の項目との間に新しい項目を追加する
+	InsertMenuLine_ID					; 指定の項目と、指定の項目の一つ上の項目との間に区切り線を追加する
+	DeleteMenuItem_ID					; メニューから選択項目を削除する
+	CheckMenuItemSelect_ID				; メニューが選択されたかどうかを取得する( 0:選択されていない  1:選択された )
+	SetMenuItemEnable_ID				; メニューの項目を選択出来るかどうかを設定する
+	SetMenuItemMark_ID					; メニューの項目にチェックマークやラジオボタンを表示するかどうかを設定する( MENUITEM_MARK_NONE 等 )
+
+	DeleteMenuItemAll					; メニューの全ての選択項目を削除する
+	ClearMenuItemSelect					; メニューが選択されたかどうかの情報を初期化
+	GetMenuItemID						; メニューの項目名からＩＤを取得する
+	GetMenuItemName						; メニューの項目名からＩＤを取得する
+	LoadMenuResource					; メニューをリソースから読み込む
+	SetMenuItemSelectCallBackFunction	; メニューの選択項目が選択されたときに呼ばれるコールバック関数を設定する
+
+	SetWindowMenu						; ウインドウにメニューを設定する
+	SetDisplayMenuFlag					; メニューを表示するかどうかをセットする
+	GetDisplayMenuFlag					; メニューを表示しているかどうかを取得する
+	GetUseMenuFlag						; メニューを使用しているかどうかを得る
+	SetAutoMenuDisplayFlag				; フルスクリーン時にメニューを自動で表示したり非表示にしたりするかどうかのフラグをセットする
+
+	; ------------------------------
+	; マウス関係関数
+	; ------------------------------
+	SetMouseDispFlag		; マウスの表示フラグのセット
+	GetMousePoint			; マウスの位置を取得する
+	SetMousePoint			; マウスの位置をセットする
+
+	GetMouseInput			; マウスのボタンの状態を得る 
+	GetMouseWheelRotVol		; 垂直マウスホイールの回転量を得る
+	GetMouseHWheelRotVol	; 水平マウスホイールの回転量を得る
+	GetMouseWheelRotVolF	; 垂直マウスホイールの回転量を取得する( 戻り値が float 型 )
+	GetMouseHWheelRotVolF	; 水平マウスホイールの回転量を取得する( 戻り値が float 型 )
+	GetMouseInputLog		; マウスのクリック情報を一つ取得する( Button:クリックされたボタン( MOUSE_INPUT_LEFT 等 )を格納する変数のアドレス  ClickX:クリックされた時のＸ座標を格納する変数のアドレス  ClickY:クリックされた時のＹ座標を格納する変数のアドレス   LogDelete:取得したクリック情報一つ分をログから削除するかどうか( TRUE:削除する  FALSE:削除しない、つまり次にこの関数が呼ばれたときに同じ値を取得することになる )　　戻り値  0:クリック情報取得できた　-1:クリック情報が無かった、つまり前回の呼び出し( または起動時から最初の呼び出し )の間に一度もマウスのボタンがクリックされなかった )
+
+	; ------------------------------------------------------------
+	;
+	; DxMemory.cpp関数プロトタイプ宣言
+	;
+	; ------------------------------------------------------------
+
+	; ------------------------------
+	; メモリ確保系関数
+	; ------------------------------
+	DxAlloc							; メモリを確保する
+	DxCalloc						; メモリを確保して０で初期化する
+	DxRealloc						; メモリの再確保を行う
+	DxFree							; メモリを解放する
+	DxSetAllocSizeTrap				; 列挙対象にするメモリの確保容量をセットする
+	DxSetAllocPrintFlag				; ＤＸライブラリ内でメモリ確保が行われる時に情報を出力するかどうかをセットする
+	DxGetAllocSize					; DxAlloc や DxCalloc で確保しているメモリサイズを取得する
+	DxGetAllocNum					; DxAlloc や DxCalloc で確保しているメモリの数を取得する
+	DxDumpAlloc						; DxAlloc や DxCalloc で確保しているメモリを列挙する
+	DxErrorCheckAlloc				; 確保したメモリ情報が破壊されていないか調べる( -1:破壊あり  0:なし )
+	DxSetAllocSizeOutFlag			; メモリが確保、解放が行われる度に確保しているメモリの容量を出力するかどうかのフラグをセットする
+	DxSetAllocMemoryErrorCheckFlag	; メモリの確保、解放が行われる度に確保しているメモリ確保情報が破損していないか調べるかどうかのフラグをセットする
+
+	; ------------------------------------------------------------
+	;
+	; DxNetwork.cpp関数プロトタイプ宣言
+	;
+	; ------------------------------------------------------------
+
+;#ifndef DX_NON_NETWORK
+
+	; ------------------------------
+	; 通信関係
+	; ------------------------------
+;	ProcessNetMessage				; 通信メッセージの処理をする関数
+
+;	GetHostIPbyName					; ＤＮＳサーバーを使ってホスト名からＩＰアドレスを取得する( IPv4版 )
+;	GetHostIPbyName_IPv6			; ＤＮＳサーバーを使ってホスト名からＩＰアドレスを取得する( IPv6版 )
+;	ConnectNetWork					; 他マシンに接続する( IPv4版 )
+;	ConnectNetWork_IPv6				; 他マシンに接続する( IPv6版 )
+;	ConnectNetWork_ASync			; 他マシンに接続する( IPv4版 )、非同期版
+;	ConnectNetWork_IPv6_ASync		; 他マシンに接続する( IPv6版 )、非同期版
+;	PreparationListenNetWork		; 接続を受けられる状態にする( IPv4版 )
+;	PreparationListenNetWork_IPv6	; 接続を受けられる状態にする( IPv6版 )
+;	StopListenNetWork				; 接続を受けつけ状態の解除
+;	CloseNetWork					; 接続を終了する
+
+;	GetNetWorkAcceptState			; 接続状態を取得する
+;	GetNetWorkDataLength			; 受信データの量を得る
+;	GetNetWorkSendDataLength		; 未送信のデータの量を得る 
+;	GetNewAcceptNetWork				; 新たに接続した通信回線を得る
+;	GetLostNetWork					; 接続を切断された通信回線を得る
+;	GetNetWorkIP					; 接続先のＩＰを得る( IPv4版 )
+;	GetNetWorkIP_IPv6				; 接続先のＩＰを得る( IPv6版 )
+;	GetMyIPAddress					; 自分のＩＰを得る
+;	SetConnectTimeOutWait			; 接続のタイムアウトまでの時間を設定する
+;	SetUseDXNetWorkProtocol			; ＤＸライブラリの通信形態を使うかどうかをセットする
+;	GetUseDXNetWorkProtocol			; ＤＸライブラリの通信形態を使うかどうかを取得する
+;	SetUseDXProtocol				; SetUseDXNetWorkProtocol の別名
+;	GetUseDXProtocol				; GetUseDXNetWorkProtocol の別名
+;	SetNetWorkCloseAfterLostFlag	; 接続が切断された直後に接続ハンドルを解放するかどうかのフラグをセットする
+;	GetNetWorkCloseAfterLostFlag	; 接続が切断された直後に接続ハンドルを解放するかどうかのフラグを取得する
+	;SetProxySetting				; ＨＴＴＰ通信で使用するプロキシ設定を行う
+	;GetProxySetting				; ＨＴＴＰ通信で使用するプロキシ設定を取得する
+	;SetIEProxySetting				; ＩＥのプロキシ設定を適応する
+
+;	NetWorkRecv						; 受信したデータを読み込む
+;	NetWorkRecvToPeek				; 受信したデータを読み込む、読み込んだデータはバッファから削除されない
+;	NetWorkRecvBufferClear			; 受信したデータをクリアする
+;	NetWorkSend						; データを送信する
+
+;	MakeUDPSocket					; UDPを使用した通信を行うソケットハンドルを作成する( RecvPort を -1 にすると送信専用のソケットハンドルになります )
+;	MakeUDPSocket_IPv6				; UDPを使用した通信を行うソケットハンドルを作成する( RecvPort を -1 にすると送信専用のソケットハンドルになります )( IPv6版 )
+;	DeleteUDPSocket					; UDPを使用した通信を行うソケットハンドルを削除する
+;	NetWorkSendUDP					; UDPを使用した通信で指定のＩＰにデータを送信する、Length は最大65507、SendPort を -1 にすると MakeUDPSocket に RecvPort で渡したポートが使用されます( 戻り値  0以上;送信できたデータサイズ  -1:エラー  -2:送信データが大きすぎる  -3:送信準備ができていない  )
+;	NetWorkSendUDP_IPv6				; UDPを使用した通信で指定のＩＰにデータを送信する、Length は最大65507、SendPort を -1 にすると MakeUDPSocket に RecvPort で渡したポートが使用されます( 戻り値  0以上;送信できたデータサイズ  -1:エラー  -2:送信データが大きすぎる  -3:送信準備ができていない  )( IPv6版 )
+;	NetWorkRecvUDP					; UDPを使用した通信でデータを受信する、Peek に TRUE を渡すと受信に成功してもデータを受信キューから削除しません( 戻り値  0以上:受信したデータのサイズ  -1:エラー  -2:バッファのサイズが足りない  -3:受信データがない )
+;	NetWorkRecvUDP_IPv6				; UDPを使用した通信でデータを受信する、Peek に TRUE を渡すと受信に成功してもデータを受信キューから削除しません( 戻り値  0以上:受信したデータのサイズ  -1:エラー  -2:バッファのサイズが足りない  -3:受信データがない )( IPv6版 )
+	;CheckNetWorkSendUDP			; UDPを使用した通信でデータが送信できる状態かどうかを調べる( 戻り値  -1:エラー  TRUE:送信可能  FALSE:送信不可能 )
+;	CheckNetWorkRecvUDP				; UDPを使用した通信で新たな受信データが存在するかどうかを調べる( 戻り値  -1:エラー  TRUE:受信データあり  FALSE:受信データなし )
+
+	; ------------------------------
+	; 使用不可
+	; ------------------------------
+	;HTTP_FileDownload			; HTTP を使用してネットワーク上のファイルをダウンロードする
+	;HTTP_GetFileSize			; HTTP を使用してネットワーク上のファイルのサイズを得る
+
+	;HTTP_StartFileDownload		; HTTP を使用したネットワーク上のファイルをダウンロードする処理を開始する
+	;HTTP_StartGetFileSize		; HTTP を使用したネットワーク上のファイルのサイズを得る処理を開始する
+	;HTTP_Close					; HTTP の処理を終了し、ハンドルを解放する
+	;HTTP_CloseAll				; 全てのハンドルに対して HTTP_Close を行う
+	;HTTP_GetState				; HTTP 処理の現在の状態を得る( NET_RES_COMPLETE 等 )
+	;HTTP_GetError				; HTTP 処理でエラーが発生した場合、エラーの内容を得る( HTTP_ERR_NONE 等 )
+	;HTTP_GetDownloadFileSize	; HTTP 処理で対象となっているファイルのサイズを得る( 戻り値: -1 = エラー・若しくはまだファイルのサイズを取得していない  0以上 = ファイルのサイズ )
+	;HTTP_GetDownloadedFileSize	; HTTP 処理で既にダウンロードしたファイルのサイズを取得する
+
+	;fgetsForNetHandle			; fgets のネットワークハンドル版( -1:取得できず 0:取得できた )
+	;URLAnalys					; ＵＲＬを解析する
+	;URLConvert					; HTTP に渡せない記号が使われた文字列を渡せるような文字列に変換する( 戻り値: -1 = エラー  0以上 = 変換後の文字列のサイズ )
+	;URLParamAnalysis			; HTTP 用パラメータリストから一つのパラメータ文字列を作成する( 戻り値:  -1 = エラー  0以上 = パラメータの文字列の長さ )
+
+
+;#endif
+
+	; ------------------------------------------------------------
+	;
+	; DxInputString.cpp関数プロトタイプ宣言
+	;
+	; ------------------------------------------------------------
+
+	; ------------------------------
+	; 文字コードバッファ操作関係
+	; ------------------------------
+	StockInputChar					; バッファにコードをストックする
+	ClearInputCharBuf				; 文字コードバッファをクリアする
+	GetInputChar					; 文字コードバッファに溜まったデータから文字コードを取得する
+	GetInputCharWait				; 文字コードバッファに溜まったデータから１バイト分取得する、バッファになにも文字コードがない場合はキーが押されるまで待つ
+
+	GetOneChar						; 文字コードバッファに溜まったデータから１文字分取得する
+	GetOneCharWait					; 文字コードバッファに溜まったデータから１文字分取得する、バッファに何も文字コードがない場合はキーが押されるまで待つ
+	GetCtrlCodeCmp					; アスキーコントロールコードか調べる
+
+;#ifndef DX_NON_KEYEX
+
+	DrawIMEInputString				; 画面上に入力中の文字列を描画する
+	SetUseIMEFlag					; ＩＭＥを使用するかどうかをセットする
+	SetInputStringMaxLengthIMESync	; ＩＭＥで入力できる最大文字数を MakeKeyInput の設定に合わせるかどうかをセットする( TRUE:あわせる  FALSE:あわせない(デフォルト) )
+	SetIMEInputStringMaxLength		; ＩＭＥで一度に入力できる最大文字数を設定する( 0:制限なし  1以上:指定の文字数で制限 )
+
+;#endif
+
+	GetStringPoint					; 全角文字、半角文字入り乱れる中から指定の文字数での半角文字数を得る
+	GetStringPoint2					; 全角文字、半角文字入り乱れる中から指定の文字数での全角文字数を得る
+	GetStringLength					; 全角文字、半角文字入り乱れる中から文字数を取得する
+
+	DrawObtainsString				; 規定領域に収めたかたちで文字列を描画
+	DrawObtainsString_CharClip		; 描画可能領域に収まるように改行しながら文字列を描画( クリップが文字単位 )
+	DrawObtainsBox					; 規定領域に収めたかたちで矩形を描画 
+
+;#ifndef DX_NON_KEYEX
+
+	InputStringToCustom				; 文字列の入力取得
+
+	KeyInputString					; 文字列の入力取得
+	KeyInputSingleCharString		; 半角文字列のみの入力取得
+	KeyInputNumber					; 数値の入力
+
+	GetIMEInputModeStr				; IMEの入力モード文字列の取得
+	GetIMEInputData					; IMEで入力中の文字列の情報を取得する
+;#ifdef DX_GCC_COMPILE
+	SetKeyInputStringColor			; InputString関数使用時の文字の各色を変更する
+;#else
+	SetKeyInputStringColor			; InputString関数使用時の文字の各色を変更する
+;#endif
+	SetKeyInputStringFont			;
+	DrawKeyInputModeString			; 入力モード文字列を描画する
+
+	InitKeyInput					; キー入力データ初期化
+	MakeKeyInput					; 新しいキー入力データの作成
+	DeleteKeyInput					; キー入力データの削除
+	SetActiveKeyInput				; 指定のキー入力をアクティブにする( -1 を指定するとアクティブなキー入力ハンドルが無い状態になります )
+	GetActiveKeyInput				; 現在アクティブになっているキー入力ハンドルを取得する
+	CheckKeyInput					; 入力が終了しているか取得する
+	ReStartKeyInput					; 入力が完了したキー入力を再度編集状態に戻す
+	ProcessActKeyInput				; キー入力処理関数
+	DrawKeyInputString				; キー入力中データの描画
+
+	SetKeyInputSelectArea			; キー入力データの指定の領域を選択状態にする( SelectStart と SelectEnd に -1 を指定すると選択状態が解除されます )
+	GetKeyInputSelectArea			; キー入力データの選択領域を取得する
+	SetKeyInputDrawStartPos			; キー入力の描画開始文字位置を設定する
+	GetKeyInputDrawStartPos			; キー入力の描画開始文字位置を取得する
+	SetKeyInputCursorBrinkTime		; キー入力時のカーソルの点滅する早さをセットする
+	SetKeyInputCursorBrinkFlag		; キー入力時のカーソルを点滅させるかどうかをセットする
+	SetKeyInputString				; キー入力データに指定の文字列をセットする
+	SetKeyInputNumber				; キー入力データに指定の数値を文字に置き換えてセットする
+	SetKeyInputNumberToFloat		; キー入力データに指定の浮動小数点値を文字に置き換えてセットする
+	GetKeyInputString				; 入力データの文字列を取得する
+	GetKeyInputNumber				; 入力データの文字列を整数値として取得する
+	GetKeyInputNumberToFloat		; 入力データの文字列を浮動小数点値として取得する
+	SetKeyInputCursorPosition		; キー入力の現在のカーソル位置を設定する
+	GetKeyInputCursorPosition		; キー入力の現在のカーソル位置を取得する
+
+;#endif
+
+	; ------------------------------------------------------------
+	;
+	; DxFile.cpp関数プロトタイプ宣言
+	;
+	; ------------------------------------------------------------
+
+	; ------------------------------
+	; ファイルアクセス関数
+	; ------------------------------
+	FileRead_open				; ファイルを開く
+	FileRead_size				; ファイルのサイズを得る
+	FileRead_close				; ファイルを閉じる
+	FileRead_tell				; ファイルポインタの現在位置を得る
+	FileRead_seek				; ファイルポインタの位置を変更する
+	FileRead_read				; ファイルからデータを読み込む
+	FileRead_idle_chk			; ファイル読み込みが完了しているかどうかを取得する
+	FileRead_eof				; ファイルの終端かどうかを得る
+	FileRead_gets				; ファイルから文字列を読み出す
+	FileRead_getc				; ファイルから一文字読み出す
+	FileRead_scanf				; ファイルから書式化されたデータを読み出す
+
+	FileRead_createInfo			; ファイル情報ハンドルを作成する( 戻り値  -1:エラー  -1以外:ファイル情報ハンドル )
+	FileRead_getInfoNum			; ファイル情報ハンドル中のファイルの数を取得する
+	FileRead_getInfo			; ファイル情報ハンドル中のファイルの情報を取得する
+	FileRead_deleteInfo			; ファイル情報ハンドルを削除する
+
+	FileRead_findFirst			; 指定のファイル又はフォルダの情報を取得し、ファイル検索ハンドルも作成する( 戻り値: -1=エラー  -1以外=ファイル検索ハンドル )
+	FileRead_findNext			; 条件の合致する次のファイルの情報を取得する( 戻り値: -1=エラー  0=成功 )
+	FileRead_findClose			; ファイル検索ハンドルを閉じる( 戻り値: -1=エラー  0=成功 )
+
+	FileRead_fullyLoad			; 指定のファイルの内容を全てメモリに読み込み、その情報のアクセスに必要なハンドルを返す( 戻り値  -1:エラー  -1以外:ハンドル )、使い終わったらハンドルは FileRead_fullyLoad_delete で削除する必要があります
+	FileRead_fullyLoad_delete	; FileRead_fullyLoad で読み込んだファイルのハンドルを削除する
+	FileRead_fullyLoad_getImage	; FileRead_fullyLoad で読み込んだファイルの内容を格納したメモリアドレスを取得する
+	FileRead_fullyLoad_getSize	; FileRead_fullyLoad で読み込んだファイルのサイズを取得する
+
+	; ------------------------------
+	; 設定関係関数
+	; ------------------------------
+	GetStreamFunctionDefault						; ＤＸライブラリでストリームデータアクセスに使用する関数がデフォルトのものか調べる( TRUE:デフォルト  FALSE:デフォルトではない )
+	ChangeStreamFunction							; ＤＸライブラリでストリームデータアクセスに使用する関数を変更する
+
+	; ------------------------------
+	; 補助関係関数
+	; ------------------------------
+	ConvertFullPath	; フルパスではないパス文字列をフルパスに変換する( CurrentDir はフルパスである必要がある(語尾に『\』があっても無くても良い) )( CurrentDir が NULL の場合は現在のカレントディレクトリを使用する )
+
+	; ------------------------------------------------------------
+	;
+	; DxInput.cpp関数プロトタイプ宣言
+	;
+	; ------------------------------------------------------------
+
+	; ------------------------------
+	; 入力状態取得関数
+	; ------------------------------
+	CheckHitKey							; キーボードの入力状態取得
+	CheckHitKeyAll						; 全キーの押下状態を取得
+	GetHitKeyStateAll					; すべてのキーの押下状態を取得する
+	SetKeyExclusiveCooperativeLevelFlag	; キーボードの協調レベルを排他レベルにするかどうかのフラグをセットする
+	GetJoypadNum						; ジョイパッドが接続されている数を取得する
+	GetJoypadInputState					; ジョイバッドの入力状態取得
+	GetJoypadAnalogInput				; ジョイパッドのアナログ的なスティック入力情報を得る
+	GetJoypadAnalogInputRight			; ( 使用非推奨 )ジョイパッドのアナログ的なスティック入力情報を得る(右スティック用)
+	GetJoypadDirectInputState			; DirectInput から得られるジョイパッドの生のデータを取得する( DX_INPUT_KEY や DX_INPUT_KEY_PAD1 を引数に渡すとエラー )
+	CheckJoypadXInput					; 指定の入力デバイスが XInput に対応しているかどうかを取得する( 戻り値  TRUE:XInput対応の入力デバイス  FALSE:XInput非対応の入力デバイス   -1:エラー )( DX_INPUT_KEY や DX_INPUT_KEY_PAD1 など、キーボードが絡むタイプを InputType に渡すとエラーとなり -1 を返す )
+	GetJoypadXInputState				; XInput から得られる入力デバイス( Xbox360コントローラ等 )の生のデータを取得する( XInput非対応のパッドの場合はエラーとなり -1 を返す、DX_INPUT_KEY や DX_INPUT_KEY_PAD1 など、キーボードが絡むタイプを InputType に渡すとエラーとなり -1 を返す )
+	KeyboradBufferProcess				; キーボードのバッファからデータを取得する処理
+	GetJoypadGUID						; ジョイパッドのＧＵIＤを得る
+	ConvertKeyCodeToVirtualKey			; ＤＸライブラリのキーコードから Windows の仮想キーコードを取得する
+	ConvertVirtualKeyToKeyCode			; Windows の仮想キーコード( VK_LEFT など ) に対応するＤＸライブラリのキーコード( KEY_INPUT_A など )を取得する( VirtualKey:変換したいWindowsの仮想キーコード　戻り値：ＤＸライブラリのキーコード )
+	SetJoypadInputToKeyInput			; ジョイパッドの入力に対応したキーボードの入力を設定する
+	SetJoypadDeadZone					; ジョイパッドの無効ゾーンの設定を行う
+	StartJoypadVibration				; ジョイパッドの振動を開始する
+	StopJoypadVibration					; ジョイパッドの振動を停止する
+	GetJoypadPOVState					; ジョイパッドのＰＯＶ入力の状態を得る( 単位は角度の１００倍  中心位置にある場合は -1 が返る )
+	GetJoypadName						; ジョイパッドのデバイス登録名と製品登録名を取得する
+	ReSetupJoypad						; ジョイパッドの再セットアップを行う( 新たに接続されたジョイパッドがある場合に検出される )
+
+	SetKeyboardNotDirectInputFlag		; キーボードの入力処理に DirectInput を使わないか、フラグをセットする
+	SetUseDirectInputFlag				; 入力処理に DirectInput を使用するかどうかのフラグをセットする
+	SetUseXInputFlag					; Xbox360コントローラの入力処理に XInput を使用するかどうかを設定する( TRUE:XInput を使用する( デフォルト )　　FALSE:XInput を使用しない )
+	SetUseJoypadVibrationFlag			; ジョイパッドの振動機能を使用するかどうかのフラグをセットする
+
+	; ------------------------------------------------------------
+	;
+	; 画像処理系関数プロトタイプ宣言
+	;
+	; ------------------------------------------------------------
+
+	; ------------------------------
+	; グラフィックハンドル作成関係関数
+	; ------------------------------
+	MakeGraph						; 空のグラフィックを作成
+	MakeScreen						; 描画可能な画面を作成
+	DerivationGraph					; 指定のグラフィックの指定部分だけを抜き出して新たなグラフィックハンドルを作成する
+	DeleteGraph						; 指定のグラフィックハンドルを削除する
+	DeleteSharingGraph				; 指定のグラフィックハンドルと、同じグラフィックデータから派生しているグラフィックハンドル( DerivationGraph で派生したハンドル、LoadDivGraph 読み込んで作成された複数のハンドル )を一度に削除する
+	GetGraphNum						; 有効なグラフィックの数を取得する
+	FillGraph						; グラフィックを特定の色で塗りつぶす
+	SetGraphLostFlag				; 解放時に立てるフラグのポインタをセットする
+	InitGraph						; 画像データの初期化
+	ReloadFileGraphAll				; ファイルから読み込んだ画像情報を再度読み込む
+
+	; ------------------------------
+	; シャドウマップハンドル関係関数
+	; ------------------------------
+	MakeShadowMap					; シャドウマップハンドルを作成する
+	DeleteShadowMap					; シャドウマップハンドルを削除する
+	SetShadowMapLightDirection		; シャドウマップが想定するライトの方向を設定する
+	ShadowMap_DrawSetup				; シャドウマップへの描画の準備を行う
+	ShadowMap_DrawEnd				; シャドウマップへの描画を終了する
+	SetUseShadowMap					; 描画で使用するシャドウマップを指定する、有効なスロットは０～２、SmHandle に -1 を渡すと指定のスロットのシャドウマップを解除
+	SetShadowMapDrawArea			; シャドウマップに描画する際の範囲を設定する( この関数で描画範囲を設定しない場合は視錐台を拡大した範囲が描画範囲となる )
+	ResetShadowMapDrawArea			; SetShadowMapDrawArea の設定を解除する
+	SetShadowMapAdjustDepth			; シャドウマップを使用した描画時の補正深度を設定する
+	TestDrawShadowMap				; シャドウマップを画面にテスト描画する
+
+	; ------------------------------
+	; グラフィックハンドルへの画像転送関数
+	; ------------------------------
+	BltBmpToGraph					; 画像データの転送
+	BltBmpToDivGraph				; 分割画像へのＢＭＰの転送
+	BltBmpOrGraphImageToGraph		; ＢＭＰ か GraphImage を画像に転送
+	BltBmpOrGraphImageToGraph2		; ＢＭＰ か GraphImage を画像に転送
+	BltBmpOrGraphImageToDivGraph	; 分割画像への ＢＭＰ か GraphImage の転送
+
+	; ------------------------------
+	; 画像からグラフィックハンドルを作成する関数
+	; ------------------------------
+	LoadBmpToGraph					; 画像を読みこむ 
+	LoadGraph						; 画像ファイルのメモリへの読みこみ
+	LoadReverseGraph				; 画像ファイルのメモリへの反転読み込み
+	LoadDivGraph					; 画像の分割読みこみ
+	LoadDivBmpToGraph				; 画像ファイルの分割読みこみ
+	LoadReverseDivGraph				; 画像の反転分割読みこみ
+	LoadBlendGraph					; 画像ファイルからブレンド用画像を読み込む
+
+;?	LoadGraphToResource				; リソースから画像データを読み込む
+;?	LoadDivGraphToResource			; リソースから画像データを分割読み込みする
+;?	LoadGraphToResource				; リソースから画像データを読み込む
+;?	LoadDivGraphToResource			; リソースから画像データを分割読み込みする
+
+	CreateGraphFromMem				; メモリ上のグラフィックイメージからグラフィックハンドルを作成する
+	ReCreateGraphFromMem			; メモリ上のグラフィックイメージから既存のグラフィックハンドルにデータを転送する
+	CreateDivGraphFromMem			; メモリ上のグラフィックイメージから分割グラフィックハンドルを作成する
+	ReCreateDivGraphFromMem			; メモリ上のグラフィックイメージから既存の分割グラフィックハンドルにデータを転送する
+	CreateGraphFromBmp				; ビットマップデータからグラフィックハンドルを作成する
+	ReCreateGraphFromBmp			; ビットマップデータから既存のグラフィックハンドルにデータを転送する
+	CreateDivGraphFromBmp			; ビットマップデータから分割グラフィックハンドルを作成する
+	ReCreateDivGraphFromBmp			; ビットマップデータから既存の分割グラフィックハンドルにデータを転送する
+	CreateDXGraph					; 基本イメージデータからサイズを割り出し、それに合ったグラフィックハンドルを作成する
+;?	CreateGraphFromGraphImage		; GraphImageデータからグラフィックハンドルを作成する
+;?	CreateGraphFromGraphImage		; GraphImageデータからグラフィックハンドルを作成する
+;?	ReCreateGraphFromGraphImage		; GraphImageデータから既存のグラフィックハンドルにデータを転送する
+;?	ReCreateGraphFromGraphImage		; GraphImageデータから既存のグラフィックハンドルにデータを転送する
+;?	CreateDivGraphFromGraphImage	; GraphImageデータから分割グラフィックハンドルを作成する
+;?	CreateDivGraphFromGraphImage	; GraphImageデータから分割グラフィックハンドルを作成する
+;?	ReCreateDivGraphFromGraphImage	; GraphImageデータから既存の分割グラフィックハンドルにデータを転送する
+;?	ReCreateDivGraphFromGraphImage	; GraphImageデータから既存の分割グラフィックハンドルにデータを転送する
+	CreateGraph						; メモリ上のグラフィックデータからグラフィックハンドルを作成する
+	CreateDivGraph					; メモリ上のグラフィックデータから分割グラフィックハンドルを作成する
+	ReCreateGraph					; メモリ上のグラフィックデータからグラフィックハンドルを再作成する
+
+	CreateBlendGraphFromSoftImage	; ソフトウエアで扱うイメージからブレンド用画像グラフィックハンドルを作成する( -1:エラー  -1以外:ブレンド用グラフィックハンドル )
+	CreateGraphFromSoftImage		; ソフトウエアで扱うイメージからグラフィックハンドルを作成する( -1:エラー  -1以外:グラフィックハンドル )
+	CreateGraphFromRectSoftImage	; ソフトウエアで扱うイメージの指定の領域を使ってグラフィックハンドルを作成する( -1:エラー  -1以外:グラフィックハンドル )
+	ReCreateGraphFromSoftImage		; ソフトウエアで扱うイメージから既存のグラフィックハンドルに画像データを転送する
+	ReCreateGraphFromRectSoftImage	; ソフトウエアで扱うイメージから既存のグラフィックハンドルに画像データを転送する
+	CreateDivGraphFromSoftImage		; ソフトウエアで扱うイメージから分割グラフィックハンドルを作成する
+
+	CreateGraphFromBaseImage		; 基本イメージデータからグラフィックハンドルを作成する
+	CreateGraphFromRectBaseImage	; 基本イメージの指定の領域を使ってグラフィックハンドルを作成する
+	ReCreateGraphFromBaseImage		; 基本イメージデータから既存のグラフィックハンドルに画像データを転送する
+	ReCreateGraphFromRectBaseImage	; 基本イメージの指定の領域を使って既存のグラフィックハンドルに画像データを転送する
+	CreateDivGraphFromBaseImage		; 基本イメージデータから分割グラフィックハンドルを作成する
+	ReloadGraph						; 画像への画像データの読み込み
+	ReloadDivGraph					; 画像への画像データの分割読み込み
+	ReloadReverseGraph				; 画像への画像データの読み込み
+	ReloadReverseDivGraph			; 画像への画像データの分割読み込み
+
+	; ------------------------------
+	; グラフィックハンドル作成時設定係関数
+	; ------------------------------
+	SetGraphColorBitDepth					; SetCreateGraphColorBitDepth の旧名称
+	GetGraphColorBitDepth					; GetCreateGraphColorBitDepth の旧名称
+	SetCreateGraphColorBitDepth				; 作成するグラフィックの色深度を設定する
+	GetCreateGraphColorBitDepth				; 作成するグラフィックの色深度を設定する
+	SetCreateGraphChannelBitDepth			; 作成するグラフィックハンドルの１チャンネル辺りのビット深度を設定する
+	GetCreateGraphChannelBitDepth			; 作成するグラフィックハンドルの１チャンネル辺りのビット深度を取得する
+	SetDrawValidGraphCreateFlag				; 描画可能なグラフィックを作成するかどうかのフラグをセットする( TRUE:描画可能  FALSE:描画不可能 )
+	GetDrawValidGraphCreateFlag				; 描画可能なグラフィックを作成するかどうかのフラグを取得する
+	SetDrawValidFlagOf3DGraph				; SetDrawValidGraphCreateFlag の旧名称
+	SetLeftUpColorIsTransColorFlag			; 画像左上の色を透過色にするかどうかのフラグをセットする
+	SetUseBlendGraphCreateFlag				; ブレンド処理用画像を作成するかどうかのフラグをセットする
+	GetUseBlendGraphCreateFlag				; ブレンド処理用画像を作成するかどうかのフラグを取得する
+	SetUseAlphaTestGraphCreateFlag			; アルファテストを使用するグラフィックを作成するかどうかのフラグをセットする
+	GetUseAlphaTestGraphCreateFlag			; アルファテストを使用するグラフィックを作成するかどうかのフラグを取得する
+	SetUseAlphaTestFlag						; SetUseAlphaTestGraphCreateFlag の旧名称
+	GetUseAlphaTestFlag						; GetUseAlphaTestGraphCreateFlag の旧名称
+	SetCubeMapTextureCreateFlag				; キューブマップテクスチャを作成するかどうかのフラグを設定する
+	GetCubeMapTextureCreateFlag				; キューブマップテクスチャを作成するかどうかのフラグを取得する
+	SetUseNoBlendModeParam					; SetDrawBlendMode 関数の第一引数に DX_BLENDMODE_NOBLEND を代入した際に、デフォルトでは第二引数は内部で２５５を指定したことになるが、その自動２５５化をしないかどうかを設定する( TRUE:しない(第二引数の値が使用される)   FALSE:する(第二引数の値は無視されて 255 が常に使用される)(デフォルト) )αチャンネル付き画像に対して描画を行う場合のみ意味がある関数
+	SetDrawValidAlphaChannelGraphCreateFlag	; 描画可能なαチャンネル付き画像を作成するかどうかのフラグをセットする,SetDrawValidGraphCreateFlag 関数で描画可能画像を作成するように設定されていないと効果がない( TRUE:αチャンネル付き FALSE:αチャンネルなし )
+	GetDrawValidAlphaChannelGraphCreateFlag	; 描画可能なαチャンネル付き画像を作成するかどうかのフラグを取得する
+	SetDrawValidFloatTypeGraphCreateFlag	; 描画可能な浮動小数点型の画像を作成するかどうかのフラグをセットする,SetDrawValidGraphCreateFlag 関数で描画可能画像を作成するように設定されていないと効果がない、ＧＰＵが Float型の画像に対応していない場合は画像作成に失敗する( TRUE:Float型 FALSE:Int型 )
+	GetDrawValidFloatTypeGraphCreateFlag	; 描画可能な浮動小数点型の画像を作成するかどうかのフラグを取得する
+	SetDrawValidGraphCreateZBufferFlag		; SetDrawScreen の引数として渡せる( 描画対象として使用できる )グラフィックハンドルを作成する際に専用のＺバッファも作成するかどうかを設定する( TRUE:専用のＺバッファを作成する( デフォルト )  FALSE:専用のＺバッファは作成しない )
+	GetDrawValidGraphCreateZBufferFlag		; SetDrawScreen の引数として渡せる( 描画対象として使用できる )グラフィックハンドルを作成する際に専用のＺバッファも作成するかどうかを取得する
+	SetCreateDrawValidGraphZBufferBitDepth	; SetDrawScreen の引数として渡せる( 描画対象として使用できる )グラフィックハンドルに適用するＺバッファのビット深度を設定する( BitDepth:ビット深度( 指定可能な値は 16, 24, 32 の何れか( SetDrawValidGraphCreateFlag 関数で描画対象として使用できるグラフィックハンドルを作成するように設定されていないと効果ありません )
+	GetCreateDrawValidGraphZBufferBitDepth	; SetDrawScreen の引数として渡せる( 描画対象として使用できる )グラフィックハンドルに適用するＺバッファのビット深度を取得する
+	SetCreateDrawValidGraphChannelNum		; 作成する描画可能な画像のチャンネル数を設定する,SetDrawValidGraphCreateFlag 関数で描画可能画像を作成するように設定されていないと効果がない
+	GetCreateDrawValidGraphChannelNum		; 作成する描画可能な画像のチャンネル数を取得する
+	SetDrawValidMultiSample					; 描画可能な画像のマルチサンプリング設定を行う
+	GetMultiSampleQuality					; 指定のマルチサンプル数で使用できる最大クオリティ値を取得する( 戻り値がマイナスの場合は引数のサンプル数が使用できないことを示します )
+	SetUseTransColor						; 透過色機能を使用するかどうかを設定する
+	SetUseTransColorGraphCreateFlag			; 透過色機能を使用することを前提とした画像の読み込み処理を行うかどうかを設定する( TRUE にすると SetDrawMode( DX_DRAWMODE_BILINEAR ); をした状態で DrawGraphF 等の浮動小数点型座標を受け取る関数で小数点以下の値を指定した場合に発生する描画結果の不自然を緩和する効果がある ( デフォルトは FALSE ) )
+	SetUseGraphAlphaChannel					; SetUseAlphaChannelGraphCreateFlag の旧名称
+	GetUseGraphAlphaChannel					; GetUseAlphaChannelGraphCreateFlag の旧名称
+	SetUseAlphaChannelGraphCreateFlag		; αチャンネル付きグラフィックを作成するかどうかのフラグをセットする( TRUE:αチャンネル付き   FALSE:αチャンネル無し )
+	GetUseAlphaChannelGraphCreateFlag		; αチャンネル付きグラフィックを作成するかどうかのフラグを取得する( TRUE:αチャンネル付き   FALSE:αチャンネル無し )
+	SetUseNotManageTextureFlag				; 非管理テクスチャを使用するか、のフラグをセット( TRUE:使用する  FALSE:使用しない )
+	GetUseNotManageTextureFlag				; 非管理テクスチャを使用するか、のフラグを取得する( TRUE:使用する  FALSE:使用しない )
+	SetTransColor							; グラフィックに設定する透過色をセットする
+	GetTransColor							; 透過色を得る
+	SetUseDivGraphFlag						; 必要ならグラフィックの分割を行うか、フラグのセット
+	SetUseMaxTextureSize					; 使用するテクスチャーの最大サイズをセット(0でデフォルト)
+	SetUseGraphBaseDataBackup				; 画像を作成する際に使用した画像データのバックアップをしてデバイスロスト時に使用するかどうかのフラグをセットする( TRUE:バックアップをする( デフォルト )  FALSE:バックアップをしない )
+	GetUseGraphBaseDataBackup				; 画像を作成する際に使用した画像データのバックアップをしてデバイスロスト時に使用するかどうかのフラグを取得する
+	SetUseSystemMemGraphCreateFlag			; システムメモリ上にグラフィックを作成するかどうかのフラグをセットする( TRUE:システムメモリ上に作成  FALSE:ＶＲＡＭ上に作成 )
+	GetUseSystemMemGraphCreateFlag			; システムメモリ上にグラフィックを作成するかどうかのフラグを取得する( TRUE:システムメモリ上に作成  FALSE:ＶＲＡＭ上に作成 )
+
+	; ------------------------------
+	; 画像情報関係関数
+	; ------------------------------
+	GetFullColorImage				; 指定の画像のＡＲＧＢ８のフルカラーイメージを取得する
+
+	GraphLock						; グラフィックメモリ領域のロック
+	GraphUnLock						; グラフィックメモリ領域のロック解除
+
+	SetUseGraphZBuffer				; グラフィックにＺバッファを使用するかどうかを設定する( 描画可能画像のみ可能 )
+	CopyGraphZBufferImage			; グラフィックのＺバッファの状態を別のグラフィックのＺバッファにコピーする( DestGrHandle も SrcGrHandle もＺバッファを持っている描画可能画像で、サイズが同じであり、且つアンチエイリアス画像ではないことが条件 )
+
+	SetDeviceLostDeleteGraphFlag	; グラフィックスデバイスのデバイスロスト発生時に指定のグラフィックハンドルを削除するかどうかを設定する( TRUE:デバイスロスト時に削除する  FALSE:デバイスロストが発生しても削除しない )
+
+	GetGraphSize					; グラフィックのサイズを得る
+	GetGraphTextureSize				; グラフィックに使用されているテクスチャーのサイズを得る
+	GetGraphMipmapCount				; グラフィックが持つミップマップレベルの数を取得する
+	GetGraphFilePath				; グラフィックハンドルが画像ファイルから読み込まれていた場合、その画像のファイルパスを取得する
+
+;?	GetTexColorData					; カラーデータを得る
+	GetMaxGraphTextureSize			; グラフィックスデバイスが対応している最大テクスチャサイズを取得する
+	GetValidRestoreShredPoint		; グラフィック復元関数の有無を取得
+	GetCreateGraphColorData			; これから新たにグラフィックを作成する場合に使用するカラー情報を取得する
+
+	; ------------------------------
+	; 画像パレット操作関係関数( ソフトウエア画像のみ使用可能 )
+	; ------------------------------
+	GetGraphPalette			; メモリ上に読み込んだ画像のパレットを取得する(フルカラー画像の場合は無効)
+	GetGraphOriginalPalette	; メモリ上に読み込んだ画像の SetGraphPalette で変更する前のパレットを取得する
+	SetGraphPalette			; メモリ上に読み込んだ画像のパレットを変更する(フルカラー画像の場合は無効)
+	ResetGraphPalette		; SetGraphPalette で変更したパレットを全て元に戻す
+
+	; ------------------------------
+	; 図形描画関数
+	; ------------------------------
+	DrawLine		; 線を描画
+	DrawBox			; 四角形の描画
+	DrawFillBox		; 中身のある四角を描画
+	DrawLineBox		; 四角形の描画 
+	DrawCircle		; 円を描く
+	DrawOval		; 楕円を描く
+	DrawTriangle	; 三角形の描画
+	DrawQuadrangle	; 四角形の描画
+	DrawPixel		; 点を描画する
+
+	Paint			; 指定点から境界色があるところまで塗りつぶす(境界色を -1 にすると指定点の色の領域を塗りつぶす)
+
+	DrawPixelSet	; 点の集合を描く
+	DrawLineSet		; 線の集合を描く
+
+	DrawPixel3D		; ３Ｄの点を描画する
+	DrawLine3D		; ３Ｄの線分を描画する
+	DrawTriangle3D	; ３Ｄの三角形を描画する
+	DrawCube3D		; ３Ｄの立方体を描画する
+	DrawSphere3D	; ３Ｄの球体を描画する
+	DrawCapsule3D	; ３Ｄのカプセルを描画する
+	DrawCone3D		; ３Ｄの円錐を描画する
+
+	; ------------------------------
+	; 画像描画関数
+	; ------------------------------
+	LoadGraphScreen							; ＢＭＰファイルを読みこんで画面に描画する
+
+	DrawGraph								; グラフィックの描画
+	DrawExtendGraph							; グラフィックの拡大縮小描画
+	DrawRotaGraph							; グラフィックの回転描画
+	DrawRotaGraph2							; グラフィックの回転描画２
+	DrawRotaGraph3							; 画像の回転描画３( 回転中心指定付き＋縦横拡大率別指定版 )
+	DrawModiGraph							; 画像の自由変形描画
+	DrawTurnGraph							; 画像の左右反転描画
+
+	DrawGraphF								; グラフィックの描画
+	DrawExtendGraphF						; グラフィックの拡大縮小描画
+	DrawRotaGraphF							; グラフィックの回転描画
+	DrawRotaGraph2F							; グラフィックの回転描画２
+	DrawRotaGraph3F							; 画像の回転描画３( 回転中心指定付き＋縦横拡大率別指定版 )( 座標指定が float 版 )
+	DrawModiGraphF							; 画像の自由変形描画( float 版 )
+	DrawTurnGraphF							; 画像の左右反転描画
+
+;?	DrawChipMap								; チップグラフィックを使ったマップ描画
+;?	DrawChipMap								; チップグラフィックを使ったマップ描画
+	DrawTile								; グラフィックを指定領域にタイル状に描画する
+
+	DrawRectGraph							; グラフィックの指定矩形部分のみを描画
+	DrawRectExtendGraph						; グラフィックの指定矩形部分のみを拡大描画
+	DrawRectRotaGraph						; コメント無し
+	DrawRectRotaGraph2						; コメント無し
+	DrawRectRotaGraph3						; 画像の指定矩形部分のみを回転描画３( 回転中心指定付き＋縦横拡大率別指定版 )
+
+	DrawRectGraphF							; グラフィックの指定矩形部分のみを描画
+	DrawRectExtendGraphF					; グラフィックの指定矩形部分のみを拡大描画
+	DrawRectRotaGraphF						; コメント無し
+	DrawRectRotaGraph2F						; コメント無し
+	DrawRectRotaGraph3F						; 画像の指定矩形部分のみを回転描画３( 回転中心指定付き＋縦横拡大率別指定版 )( 座標指定が float 版 )
+
+	DrawBlendGraph							; ブレンド画像と合成して画像を描画する
+	DrawBlendGraphPos						; ブレンド画像と合成して画像を描画する( ブレンド画像の起点座標を指定する版 )
+
+	DrawCircleGauge							; 円グラフ的な描画を行う
+
+	DrawGraphToZBuffer						; Ｚバッファに対して画像の描画を行う
+	DrawTurnGraphToZBuffer					; Ｚバッファに対して画像の左右反転描画
+	DrawExtendGraphToZBuffer				; Ｚバッファに対して画像の拡大縮小描画
+	DrawRotaGraphToZBuffer					; Ｚバッファに対して画像の回転描画
+	DrawRotaGraph2ToZBuffer					; Ｚバッファに対して画像の回転描画２( 回転中心指定付き )
+	DrawRotaGraph3ToZBuffer					; Ｚバッファに対して画像の回転描画３( 回転中心指定付き＋縦横拡大率別指定版 )
+	DrawModiGraphToZBuffer					; Ｚバッファに対して画像の自由変形描画
+	DrawBoxToZBuffer						; Ｚバッファに対して矩形の描画を行う
+	DrawCircleToZBuffer						; Ｚバッファに対して円の描画を行う
+
+	DrawPolygon								; ２Ｄポリゴンを描画する
+	DrawPolygon2D							; ２Ｄポリゴンを描画する
+	DrawPolygon3D							; ３Ｄポリゴンを描画する
+	DrawPolygonIndexed2D					; ２Ｄポリゴンを描画する( 頂点インデックスを使用 )
+	DrawPolygonIndexed3D					; ３Ｄポリゴンを描画する(インデックス)
+	DrawPolygonIndexed3DBase				; ３Ｄポリゴンを描画する(インデックス)( 旧バージョン用 )
+	DrawPolygon3DBase						; ３Ｄポリゴンを描画する( 旧バージョン用 )
+
+	DrawPolygonBase							; ２Ｄポリゴンを描画する
+	DrawPrimitive2D							; ２Ｄプリミティブを描画する
+	DrawPrimitive3D							; ３Ｄプリミティブを描画する
+	DrawPrimitiveIndexed2D					; ２Ｄプリミティブを描画する(インデックス)
+	DrawPrimitiveIndexed3D					; ３Ｄプリミティブを描画する(インデックス)
+
+	DrawPolygon3D_UseVertexBuffer			; 頂点バッファを使用して３Ｄポリゴンを描画する
+	DrawPrimitive3D_UseVertexBuffer			; 頂点バッファを使用して３Ｄプリミティブを描画する
+	DrawPrimitive3D_UseVertexBuffer2		; 頂点バッファを使用して３Ｄプリミティブを描画する
+	DrawPolygonIndexed3D_UseVertexBuffer	; 頂点バッファとインデックスバッファを使用して３Ｄポリゴンを描画する
+	DrawPrimitiveIndexed3D_UseVertexBuffer	; 頂点バッファとインデックスバッファを使用して３Ｄプリミティブを描画する
+	DrawPrimitiveIndexed3D_UseVertexBuffer2	; 頂点バッファとインデックスバッファを使用して３Ｄプリミティブを描画する
+
+	DrawGraph3D								; グラフィックの３Ｄ描画
+	DrawExtendGraph3D						; グラフィックの拡大３Ｄ描画
+	DrawRotaGraph3D							; グラフィックの回転３Ｄ描画
+	DrawRota2Graph3D						; グラフィックの回転３Ｄ描画(回転中心指定型)
+	DrawModiBillboard3D						; グラフィックの自由変形３Ｄ描画
+	DrawBillboard3D							; ３Ｄ空間上にグラフィックを描画
+
+	; ------------------------------
+	; 描画設定関係関数
+	; ------------------------------
+	SetDrawMode									; 描画モードをセットする
+	GetDrawMode									; 描画モードを取得する
+	SetDrawBlendMode							; 描画ブレンドモードをセットする
+	GetDrawBlendMode							; 描画ブレンドモードを取得する
+	SetDrawAlphaTest							; 描画時のアルファテストの設定を行う( TestMode:DX_CMP_GREATER等( -1:デフォルト動作に戻す )  TestParam:描画アルファ値との比較に使用する値 )
+	SetBlendGraph								; 描画処理時に描画する画像とブレンドするαチャンネル付き画像をセットする( BlendGraph を -1 でブレンド機能を無効 )
+	SetBlendGraphParam							; 描画処理時に描画する画像とブレンドする画像のブレンド設定を行う、BlendGraph を -1 にすれば設定を解除、その場合 BlendType とその後ろのパラメータは無視される
+	SetBlendGraphPosition						; ブレンド画像の起点座標をセットする
+	SetDrawBright								; 描画輝度をセット
+	GetDrawBright								; 描画輝度を取得する
+	SetIgnoreDrawGraphColor						; 描画する画像の色成分を無視するかどうかを指定する( EnableFlag:この機能を使うかどうか( TRUE:使う  FALSE:使わない ) )
+	SetMaxAnisotropy							; 最大異方性の値をセットする
+
+	SetUseZBufferFlag							; Ｚバッファを有効にするか、フラグをセットする( ２Ｄと３Ｄ描画に影響 )
+	SetWriteZBufferFlag							; Ｚバッファに書き込みを行うか、フラグをセットする( ２Ｄと３Ｄ描画に影響 )
+	SetZBufferCmpType							; Ｚ値の比較モードをセットする( ２Ｄと３Ｄ描画に影響 )
+	SetZBias									; Ｚバイアスをセットする( ２Ｄと３Ｄ描画に影響 )
+	SetUseZBuffer3D								; Ｚバッファを有効にするか、フラグをセットする( ３Ｄ図形描画のみに影響 )
+	SetWriteZBuffer3D							; Ｚバッファに書き込みを行うか、フラグをセットする( ３Ｄ図形描画のみに影響 )
+	SetZBufferCmpType3D							; Ｚ値の比較モードをセットする( ３Ｄ図形描画のみに影響 )
+	SetZBias3D									; Ｚバイアスをセットする( ３Ｄ図形描画のみに影響 )
+	SetDrawZ									; ２Ｄ描画時にＺバッファに書き込むＺ値を変更する
+
+	SetDrawArea									; 描画可能領域のセット
+	GetDrawArea									; 描画可能領域を得る
+	SetDrawAreaFull								; 描画可能領域を描画対象画面全体にする
+	SetDraw3DScale								; ３Ｄ描画のスケールをセットする
+
+	SetRestoreShredPoint						; SetRestoreGraphCallback の旧名
+	SetRestoreGraphCallback						; グラフィックハンドル復元関数の登録
+	RunRestoreShred								; グラフィック復元関数の実行
+	SetGraphicsDeviceRestoreCallbackFunction	; グラフィックスデバイスがロストから復帰した際に呼ばれるコールバック関数を設定する
+	SetGraphicsDeviceLostCallbackFunction		; グラフィックスデバイスがロストから復帰する前に呼ばれるコールバック関数を設定する
+
+	SetTransformToWorld							; ワールド変換用行列をセットする
+	GetTransformToWorldMatrix					; ワールド行列を取得する
+	SetTransformToView							; ビュー変換用行列をセットする
+	GetTransformToViewMatrix					; ビュー行列を取得する
+	SetTransformToProjection					; 投影変換用行列をセットする
+	GetTransformToProjectionMatrix				; 射影行列を取得する
+	SetTransformToViewport						; ビューポート行列をセットする
+	GetTransformToViewportMatrix				; ビューポート行列を取得する
+	GetTransformToAPIViewportMatrix				; Direct3Dで自動適用されるビューポート行列を取得する
+	SetDefTransformMatrix						; デフォルトの変換行列をセットする
+	GetTransformPosition						; ローカル座標から画面座標を取得する
+	GetBillboardPixelSize						; ワールド空間上のビルボードのサイズからスクリーンに投影した場合のピクセル単位のサイズを取得する
+	ConvWorldPosToViewPos						; ワールド座標をビュー座標に変換する
+	ConvWorldPosToScreenPos						; ワールド座標をスクリーン座標に変換する
+	ConvWorldPosToScreenPosPlusW				; ワールド座標をスクリーン座標に変換する、最後のＸＹＺ座標をＷで割る前の値を得る
+	ConvScreenPosToWorldPos						; スクリーン座標をワールド座標に変換する
+	ConvScreenPosToWorldPos_ZLinear				; スクリーン座標をワールド座標に変換する( Z座標が線形 )
+
+	SetUseCullingFlag							; SetUseBackCulling の旧名称
+	SetUseBackCulling							; ポリゴンカリングの有効、無効をセットする
+
+	SetTextureAddressMode						; テクスチャアドレスモードを設定する
+	SetTextureAddressModeUV						; テクスチャアドレスモードを設定する
+	SetTextureAddressTransform					; テクスチャ座標変換パラメータをセットする
+	SetTextureAddressTransformMatrix			; テクスチャ座標変換行列をセットする
+	ResetTextureAddressTransform				; テクスチャ座標変換パラメータをリセットする
+
+	SetFogEnable								; フォグを有効にするかどうかを設定する( TRUE:有効  FALSE:無効 )
+	SetFogMode									; フォグモードを設定する
+	SetFogColor									; フォグカラーを変更する
+	SetFogStartEnd								; フォグが始まる距離と終了する距離を設定する( 0.0f ～ 1.0f )
+	SetFogDensity								; フォグの密度を設定する( 0.0f ～ 1.0f )
+
+	; ------------------------------
+	; 画面関係関数
+	; ------------------------------
+	GetPixel									; 指定座標の色を取得する
+	GetDrawScreenGraph							; アクティブになっている画面から指定領域のグラフィックを取得する
+	BltDrawValidGraph							; SetDrawScreen で描画対象にできるグラフィックハンドルから指定領域の画像情報を別のグラフィックハンドルに転送する
+	ScreenFlip									; 裏画面と表画面を交換する
+	ScreenCopy									; 裏画面の内容を表画面に描画する
+	WaitVSync									; 垂直同期信号を待つ
+	ClearDrawScreen								; 画面の状態を初期化する
+	ClearDrawScreenZBuffer						; 画面のＺバッファの状態を初期化する
+	ClsDrawScreen								; 画面の状態を初期化する(ClearDrawScreenの旧名称)
+	SetDrawScreen								; 描画先画面のセット
+	GetDrawScreen								; 描画先画面を取得する
+	GetActiveGraph								; アクティブになっているグラフィックのハンドルを得る
+	SetDrawZBuffer								; 描画先Ｚバッファのセット( DrawScreen 付属のＺバッファを描画先Ｚバッファにする、DrawScreen を -1 にするとデフォルトの描画先Ｚバッファに戻る )
+
+	BltBackScreenToWindow						; 裏画面の内容を指定のウインドウに転送する
+	BltRectBackScreenToWindow					; 裏画面の指定の領域をウインドウのクライアント領域の指定の領域に転送する
+
+	SetGraphMode								; 画面モードを設定する
+	SetEmulation320x240							; ６４０ｘ４８０の画面で３２０ｘ２４０の画面解像度にするかどうかのフラグをセットする、６４０ｘ４８０以外の解像度では無効( TRUE:有効  FALSE:無効 )
+	SetZBufferSize								; 画面用のＺバッファのサイズを設定する
+	SetZBufferBitDepth							; 画面用のＺバッファのビット深度を設定する( 16 or 24 or 32 )
+	SetWaitVSyncFlag							; ＶＳＹＮＣ待ちをするかのフラグセット
+	GetWaitVSyncFlag							; ＶＳＹＮＣ待ちをする設定になっているかどうかを取得する
+	SetFullSceneAntiAliasingMode				; 画面のフルスクリーンアンチエイリアスモードの設定をする( DxLib_Init の前でのみ使用可能 )
+	SetGraphDisplayArea							; ScreenFlip 時に表画面全体に転送する裏画面の領域を設定する( DxLib_Init の前でのみ使用可能 )
+	SetChangeScreenModeGraphicsSystemResetFlag	; 画面モード変更時( とウインドウモード変更時 )にグラフィックスシステムの設定やグラフィックハンドルをリセットするかどうかを設定する( TRUE:リセットする  FALSE:リセットしない )
+	GetScreenState								; 現在の画面の大きさとカラービット数を得る 
+	GetDrawScreenSize							; 描画サイズを取得する
+	GetScreenBitDepth							; 使用色ビット数を返す
+	GetChangeDisplayFlag						; 画面モードが変更されているかどうかのフラグを取得する
+	GetVideoMemorySize							; ビデオメモリの容量を得る
+	GetRefreshRate								; 現在の画面のリフレッシュレートを取得する
+	GetDisplayModeNum							; 変更可能なディスプレイモードの数を取得する
+	GetDisplayMode								; 変更可能なディスプレイモードの情報を取得する( ModeIndex は 0 ～ GetDisplayModeNum の戻り値-1 )
+	GetDispColorData							; ディスプレーのカラーデータポインタを得る
+	GetMultiDrawScreenNum						; 同時に描画を行うことができる画面の数を取得する
+	SetDisplayRefreshRate						; フルスクリーン時の画面のリフレッシュレートを変更する(Windows2000以降のみ有効)
+
+	; ------------------------------
+	; その他設定関係関数
+	; ------------------------------
+	SetUseNormalDrawShader					; 通常描画にプログラマブルシェーダーを使用するかどうかを設定する( TRUE:使用する( デフォルト )  FALSE:使用しない )
+	SetUseSoftwareRenderModeFlag			; ソフトウエアレンダリングモードを使用するかどうかをセットする
+	SetNotUse3DFlag							; ３Ｄ機能を使わないフラグのセット
+	SetUse3DFlag							; ３Ｄ機能を使うか、のフラグをセット
+	GetUse3DFlag							; 描画に３Ｄ機能を使うかフラグを取得
+	SetScreenMemToVramFlag					; 画面データをＶＲＡＭに置くか、フラグ
+	GetScreenMemToSystemMemFlag				; 画面グラフィックデータがシステムメモリに存在するかフラグの取得
+
+	SetWindowDrawRect						; 通常使用しない
+	RestoreGraphSystem						; ＤＸライブラリのグラフィック関連の復帰処理を行う
+	SetAeroDisableFlag						; Vista以降の Windows Aero を無効にするかどうかをセットする、TRUE:無効にする  FALSE:有効にする( DxLib_Init の前に呼ぶ必要があります )
+	SetUseDirect3D9Ex						; Vista以降の環境で Direct3D9Ex を使用するかどうかを設定する( TRUE:使用する( デフォルト )  FALSE:使用しない )( DxLib_Init の前に呼ぶ必要があります )
+	SetUseHardwareVertexProcessing			; ハードウエアの頂点演算処理機能を使用するかどうかを設定する
+	SetUsePixelLighting						; ピクセル単位でライティングを行うかどうかを設定する、要 ShaderModel 3.0( TRUE:ピクセル単位のライティングを行う  FALSE:頂点単位のライティングを行う( デフォルト ) )
+	SetMultiThreadFlag						; DirectDraw や Direct3D の協調レベルをマルチスレッド対応にするかどうかをセットする
+	SetUseDirectDrawDeviceIndex				; 使用する DirectDraw デバイスのインデックスを設定する
+	SetUseOldDrawModiGraphCodeFlag			; 以前の DrawModiGraph 関数のコードを使用するかどうかのフラグをセットする
+	SetUseVramFlag							; ＶＲＡＭを使用するかのフラグをセットする
+	GetUseVramFlag							; ２Ｄグラフィックサーフェス作成時にシステムメモリーを使用するかのフラグ取得
+	SetBasicBlendFlag						; 簡略化ブレンド処理を行うか否かのフラグをセットする
+	SetUseBasicGraphDraw3DDeviceMethodFlag	; 単純図形の描画に３Ｄデバイスの機能を使用するかどうかのフラグをセットする
+
+	SetUseDirectDrawFlag					; ＤｉｒｅｃｔＤｒａｗを使用するかどうかをセットする
+	SetUseGDIFlag							; ＧＤＩ描画を必要とするか、を変更する
+	GetUseGDIFlag							; ＧＤＩ描画を必要とするかどうかを取得する
+	SetDDrawUseGuid							; ＤｉｒｅｃｔＤｒａｗが使用するＧＵＤＩを設定する
+	GetUseDDrawObj							; 現在使用しているＤｉｒｅｃｔＤｒａｗオブジェクトのアドレスを取得する
+	GetDirectDrawDeviceGUID					; 有効な DirectDraw デバイスの GUID を取得する
+	GetDirectDrawDeviceDescription			; 有効な DirectDraw デバイスの名前を得る
+	GetDirectDrawDeviceNum					; 有効な DirectDraw デバイスの数を取得する
+	GetUseDirect3DDevice9					; 使用中のＤｉｒｅｃｔ３ＤＤｅｖｉｃｅ９オブジェクトを得る
+	GetUseDirect3D9BackBufferSurface		; 使用中のバックバッファのDirect3DSurface9オブジェクトを取得する
+
+	RefreshDxLibDirect3DSetting				; ＤＸライブラリが行ったDirect3Dの設定を再度行う( 特殊用途 )
+	RenderVertex							; 頂点バッファに溜まった頂点データを吐き出す
+
+	; ------------------------------
+	; 描画先画面保存関数
+	; ------------------------------
+	; Jpeg_Quality         = 0:低画質～100:高画質
+	; Png_CompressionLevel = 0:無圧縮～  9:最高圧縮
+	SaveDrawScreen			; 現在描画対象になっている画面を保存する
+	SaveDrawScreenToBMP		; 現在描画対象になっている画面をＢＭＰ形式で保存する
+	SaveDrawScreenToJPEG	; 現在描画対象になっている画面をＪＰＥＧ形式で保存する Quality = 画質、値が大きいほど低圧縮高画質,0～100 
+	SaveDrawScreenToPNG		; 現在描画対象になっている画面をＰＮＧ形式で保存する CompressionLevel = 圧縮率、値が大きいほど高圧縮率高負荷、０は無圧縮,0～9
+
+	; ------------------------------
+	; 頂点バッファ関係関数
+	; ------------------------------
+	CreateVertexBuffer		; 頂点バッファを作成する( -1:エラー  0以上:頂点バッファハンドル )
+	DeleteVertexBuffer		; 頂点バッファを削除する
+	InitVertexBuffer		; すべての頂点バッファを削除する
+	SetVertexBufferData		; 頂点バッファに頂点データを転送する
+	CreateIndexBuffer		; インデックスバッファを作成する( -1:エラー　0以上：インデックスバッファハンドル )
+	DeleteIndexBuffer		; インデックスバッファを削除する
+	InitIndexBuffer			; すべてのインデックスバッファを削除する
+	SetIndexBufferData		; インデックスバッファにインデックスデータを転送する
+	GetMaxPrimitiveCount	; グラフィックスデバイスが対応している一度に描画できるプリミティブの最大数を取得する
+	GetMaxVertexIndex		; グラフィックスデバイスが対応している一度に使用することのできる最大頂点数を取得する
+
+	; ------------------------------
+	; シェーダー関係関数
+	; ------------------------------
+	GetValidShaderVersion							; 使用できるシェーダーのバージョンを取得する( 0=使えない  200=シェーダーモデル２．０が使用可能  300=シェーダーモデル３．０が使用可能 )
+
+	LoadVertexShader								; 頂点シェーダーバイナリをファイルから読み込み頂点シェーダーハンドルを作成する( 戻り値 -1:エラー  -1以外:シェーダーハンドル )
+	LoadPixelShader									; ピクセルシェーダーバイナリをファイルから読み込みピクセルシェーダーハンドルを作成する( 戻り値 -1:エラー  -1以外:シェーダーハンドル )
+	LoadVertexShaderFromMem							; メモリ空間上に存在する頂点シェーダーバイナリから頂点シェーダーハンドルを作成する( 戻り値 -1:エラー  -1以外:シェーダーハンドル )
+	LoadPixelShaderFromMem							; メモリ空間上に存在するピクセルシェーダーバイナリからピクセルシェーダーハンドルを作成する( 戻り値 -1:エラー  -1以外:シェーダーハンドル )
+	DeleteShader									; シェーダーハンドルの削除
+	InitShader										; シェーダーハンドルを全て削除する
+
+	GetConstIndexToShader							; 指定の名前を持つ定数が使用するシェーダー定数の番号を取得する
+	GetConstCountToShader							; 指定の名前を持つ定数が使用するシェーダー定数の数を取得する
+	GetConstDefaultParamFToShader					; 指定の名前を持つ浮動小数点定数のデフォルトパラメータが格納されているメモリアドレスを取得する
+	SetVSConstSF									; 頂点シェーダーの float 型定数を設定する
+	SetVSConstF										; 頂点シェーダーの float 型定数を設定する
+	SetVSConstFMtx									; 頂点シェーダーの float 型定数に行列を設定する
+	SetVSConstFMtxT									; 頂点シェーダーの float 型定数に転置した行列を設定する
+	SetVSConstSI									; 頂点シェーダーの int 型定数を設定する
+	SetVSConstI										; 頂点シェーダーの int 型定数を設定する
+	SetVSConstB										; 頂点シェーダーの BOOL 型定数を設定する
+	SetVSConstSFArray								; 頂点シェーダーの float 型定数を設定する( 配列を使って連番インデックスに一度に設定 )
+	SetVSConstFArray								; 頂点シェーダーの float 型定数を設定する( 配列を使って連番インデックスに一度に設定 )
+	SetVSConstFMtxArray								; 頂点シェーダーの float 型定数に行列を設定する( 配列を使って連番インデックスに一度に設定 )
+	SetVSConstFMtxTArray							; 頂点シェーダーの float 型定数に転置した行列を設定する( 配列を使って連番インデックスに一度に設定 )
+	SetVSConstSIArray								; 頂点シェーダーの int 型定数を設定する( 配列を使って連番インデックスに一度に設定 )
+	SetVSConstIArray								; 頂点シェーダーの int 型定数を設定する( 配列を使って連番インデックスに一度に設定 )
+	SetVSConstBArray								; 頂点シェーダーの BOOL 型定数を設定する( 配列を使って連番インデックスに一度に設定 )
+	ResetVSConstF									; 頂点シェーダーの float 型定数の設定をリセットする
+	ResetVSConstI									; 頂点シェーダーの int 型定数の設定をリセットする
+	ResetVSConstB									; 頂点シェーダーの BOOL 型定数の設定をリセットする
+
+	SetPSConstSF									; ピクセルシェーダーの float 型定数を設定する
+	SetPSConstF										; ピクセルシェーダーの float 型定数を設定する
+	SetPSConstFMtx									; ピクセルシェーダーの float 型定数に行列を設定する
+	SetPSConstFMtxT									; ピクセルシェーダーの float 型定数に転置した行列を設定する
+	SetPSConstSI									; ピクセルシェーダーの int 型定数を設定する
+	SetPSConstI										; ピクセルシェーダーの int 型定数を設定する
+	SetPSConstB										; ピクセルシェーダーの BOOL 型定数を設定する
+	SetPSConstSFArray								; ピクセルシェーダーの float 型定数を設定する( 配列を使って連番インデックスに一度に設定 )
+	SetPSConstFArray								; ピクセルシェーダーの float 型定数を設定する( 配列を使って連番インデックスに一度に設定 )
+	SetPSConstFMtxArray								; ピクセルシェーダーの float 型定数に行列を設定する( 配列を使って連番インデックスに一度に設定 )
+	SetPSConstFMtxTArray							; ピクセルシェーダーの float 型定数に転置した行列を設定する( 配列を使って連番インデックスに一度に設定 )
+	SetPSConstSIArray								; ピクセルシェーダーの int 型定数を設定する( 配列を使って連番インデックスに一度に設定 )
+	SetPSConstIArray								; ピクセルシェーダーの int 型定数を設定する( 配列を使って連番インデックスに一度に設定 )
+	SetPSConstBArray								; ピクセルシェーダーの BOOL 型定数を設定する( 配列を使って連番インデックスに一度に設定 )
+	ResetPSConstF									; ピクセルシェーダーの float 型定数の設定をリセットする
+	ResetPSConstI									; ピクセルシェーダーの int 型定数の設定をリセットする
+	ResetPSConstB									; ピクセルシェーダーの BOOL 型定数の設定をリセットする
+
+	SetRenderTargetToShader							; シェーダー描画での描画先を設定する
+	SetUseTextureToShader							; シェーダー描画で使用するグラフィックを設定する
+	SetUseVertexShader								; シェーダー描画に使用する頂点シェーダーを設定する( -1を渡すと解除 )
+	SetUsePixelShader								; シェーダー描画に使用するピクセルシェーダーを設定する( -1を渡すと解除 )
+
+	CalcPolygonBinormalAndTangentsToShader			; ポリゴンの頂点の接線と従法線をＵＶ座標から計算してセットする
+	CalcPolygonIndexedBinormalAndTangentsToShader	; ポリゴンの頂点の接線と従法線をＵＶ座標から計算してセットする( 頂点インデックスを使用する )
+
+	DrawPolygon2DToShader							; シェーダーを使って２Ｄポリゴンを描画する
+	DrawPolygon3DToShader							; シェーダーを使って３Ｄポリゴンを描画する
+	DrawPolygonIndexed2DToShader					; シェーダーを使って２Ｄポリゴンを描画する(インデックス)
+	DrawPolygonIndexed3DToShader					; シェーダーを使って３Ｄポリゴンを描画する(インデックス)
+	DrawPrimitive2DToShader							; シェーダーを使って２Ｄプリミティブを描画する
+	DrawPrimitive3DToShader							; シェーダーを使って３Ｄプリミティブを描画する
+	DrawPrimitiveIndexed2DToShader					; シェーダーを使って２Ｄプリミティブを描画する(インデックス)
+	DrawPrimitiveIndexed3DToShader					; シェーダーを使って３Ｄプリミティブを描画する(インデックス)
+	DrawPolygon3DToShader_UseVertexBuffer			; シェーダーを使って３Ｄポリゴンを描画する( 頂点バッファ使用版 )
+	DrawPolygonIndexed3DToShader_UseVertexBuffer	; シェーダーを使って３Ｄポリゴンを描画する( 頂点バッファとインデックスバッファ使用版 )
+	DrawPrimitive3DToShader_UseVertexBuffer			; シェーダーを使って３Ｄプリミティブを描画する( 頂点バッファ使用版 )
+	DrawPrimitive3DToShader_UseVertexBuffer2		; シェーダーを使って３Ｄプリミティブを描画する( 頂点バッファ使用版 )
+	DrawPrimitiveIndexed3DToShader_UseVertexBuffer	; シェーダーを使って３Ｄプリミティブを描画する( 頂点バッファとインデックスバッファ使用版 )
+	DrawPrimitiveIndexed3DToShader_UseVertexBuffer2	; シェーダーを使って３Ｄプリミティブを描画する( 頂点バッファとインデックスバッファ使用版 )
+
+
+	; ------------------------------
+	; フィルター関係関数
+	; ------------------------------
+	GraphFilter			; 画像にフィルター処理を行う
+	GraphFilterBlt		; 画像のフィルター付き転送を行う
+	GraphFilterRectBlt	; 画像のフィルター付き転送を行う( 矩形指定 )
+
+	GraphBlend			; 二つの画像をブレンドする
+	GraphBlendBlt		; 二つの画像をブレンドして結果を指定の画像に出力する
+	GraphBlendRectBlt	; 二つの画像をブレンドして結果を指定の画像に出力する( 矩形指定 )
+
+	; ------------------------------
+	; ムービーグラフィック関係関数
+	; ------------------------------
+	PlayMovie						; 動画ファイルの再生
+	OpenMovieToGraph				; ムービーを開く
+	PlayMovieToGraph				; ムービーグラフィックに含まれるムービーの再生を開始する
+	PauseMovieToGraph				; ムービーグラフィックに含まれるムービーの再生をストップする
+	AddMovieFrameToGraph			; ムービーのフレームを進める、戻すことは出来ない( ムービーが停止状態で、且つ Ogg Theora のみ有効 )
+	SeekMovieToGraph				; ムービーの再生位置を設定する(ミリ秒単位)
+	GetMovieStateToGraph			; ムービーの再生状態を得る
+	SetMovieVolumeToGraph			; ムービーのボリュームをセットする(0～10000)
+	ChangeMovieVolumeToGraph		; ムービーのボリュームをセットする(0～255)
+	GetMovieBaseImageToGraph		; ムービーの基本イメージデータを取得する
+	GetMovieTotalFrameToGraph		; ムービーの総フレーム数を得る( Ogg Theora でのみ有効 )
+	TellMovieToGraph				; ムービーの再生位置を取得する(ミリ秒単位)
+	TellMovieToGraphToFrame			; ムービーの再生位置を取得する(フレーム単位)
+	SeekMovieToGraphToFrame			; ムービーの再生位置を設定する(フレーム単位)
+	GetOneFrameTimeMovieToGraph		; ムービーの１フレームあたりの時間を得る
+	GetLastUpdateTimeMovieToGraph	; ムービーのイメージを最後に更新した時間を得る(ミリ秒単位)
+	SetMovieRightImageAlphaFlag		; 動画ファイルの右半分の赤成分ををアルファ情報として扱うかどうかをセットする( TRUE:アルファ情報として扱う )
+	SetMovieColorA8R8G8B8Flag		; 読み込む動画ファイルが32bitカラーだった場合、A8R8G8B8 形式として扱うかどうかをセットする、32bitカラーではない動画ファイルに対しては無効( Flag  TRUE:A8R8G8B8として扱う  FALSE:X8R8G8B8として扱う( デフォルト ) )
+
+	; ------------------------------
+	; カメラ関係関数
+	; ------------------------------
+	SetCameraNearFar					; カメラの Nearクリップ面と Farクリップ面の距離を設定する
+	SetCameraPositionAndTarget_UpVecY	; カメラの設定をする、視点、注視点、アップベクトルはＹ軸版
+	SetCameraPositionAndTargetAndUpVec	; カメラの設定をする、視点、注視点、アップベクトル指定版
+	SetCameraPositionAndAngle			; カメラの設定をする、垂直回転角度、水平回転角度、捻り回転角度、視点指定版
+	SetCameraViewMatrix					; ビュー行列を直接設定する
+	SetCameraScreenCenter				; 画面上におけるカメラが見ている映像の中心の座標を設定する
+
+	SetupCamera_Perspective				; 遠近法カメラをセットアップする
+	SetupCamera_Ortho					; 正射影カメラをセットアップする
+	SetupCamera_ProjectionMatrix		; 射影行列を設定する
+	SetCameraDotAspect					; カメラのドットアスペクト比を設定する
+
+	CheckCameraViewClip					; 指定の座標がカメラの視界に入っているかどうかを判定する( 戻り値 TRUE:視界に入っていない  FALSE:視界に入っている )
+	CheckCameraViewClip_Dir				; 指定の座標がカメラの視界に入っているかどうかを判定する、戻り値で外れている方向も知ることができる( 戻り値 0:視界に入っている  0以外:視界に入っていない( DX_CAMERACLIP_LEFT や DX_CAMERACLIP_RIGHT が or 演算で混合されたもの、and 演算で方向を確認できる ) )
+	CheckCameraViewClip_Box				; 二つの座標で表されるボックスがカメラの視界に入っているかどうかを判定する( 戻り値 TRUE:視界に入っていない  FALSE:視界に入っている )
+
+	GetCameraNear						; カメラの Near クリップ面の距離を取得する
+	GetCameraFar						; カメラの Far クリップ面の距離を取得する
+
+	GetCameraPosition					; カメラの位置を取得する
+	GetCameraTarget						; カメラの注視点を取得する
+	GetCameraUpVector					; カメラの視線に垂直な上方向のベクトルを得る
+	GetCameraAngleHRotate				; カメラの水平方向の向きを取得する
+	GetCameraAngleVRotate				; カメラの垂直方向の向きを取得する
+	GetCameraAngleTRotate				; カメラの向きの捻り角度を取得する
+
+	GetCameraViewMatrix					; ビュー行列を取得する
+	GetCameraBillboardMatrix			; ビルボード行列を取得する
+	GetCameraFov						; カメラの視野角を取得する
+	GetCameraSize						; カメラの視野サイズを取得する
+	GetCameraProjectionMatrix			; 射影行列を取得する
+	GetCameraDotAspect					; カメラのドットアスペクト比を得る
+	GetCameraViewportMatrix				; ビューポート行列を取得する
+	GetCameraAPIViewportMatrix			; Direct3Dで自動適用されるビューポート行列を取得する
+
+	; ------------------------------
+	; ライト関係関数
+	; ------------------------------
+	SetUseLighting				; ライティング計算機能を使用するかどうかを設定する
+	SetMaterialUseVertDifColor	; ３Ｄ図形描画のライティング計算に頂点カラーのディフューズカラーを使用するかどうかを設定する
+	SetMaterialUseVertSpcColor	; ３Ｄ図形描画のライティング計算に頂点カラーのスペキュラカラーを使用するかどうかを設定する
+	SetMaterialParam			; ３Ｄ図形描画のライティング計算に使用するマテリアルパラメータを設定する
+	SetUseSpecular				; ３Ｄ図形描画にスペキュラを使用するかどうかを設定する
+	SetGlobalAmbientLight		; グローバルアンビエントライトカラーを設定する
+
+	ChangeLightTypeDir			; ライトのタイプをディレクショナルライトにする
+	ChangeLightTypeSpot			; ライトのタイプをスポットライトにする
+	ChangeLightTypePoint		; ライトのタイプをポイントライトにする
+	GetLightType				; ライトのタイプを取得する( 戻り値は DX_LIGHTTYPE_DIRECTIONAL 等 )
+	SetLightEnable				; ライトの有効、無効をセットする
+	GetLightEnable				; ライト効果の有効、無効を取得する( TRUE:有効  FALSE:無効 )
+	SetLightDifColor			; ライトのディフューズカラーを設定する
+	GetLightDifColor			; ライトのディフューズカラーを取得する
+	SetLightSpcColor			; ライトのスペキュラカラーを設定する
+	GetLightSpcColor			; ライトのスペキュラカラーを取得する
+	SetLightAmbColor			; ライトのアンビエントカラーを設定する
+	GetLightAmbColor			; ライトのアンビエントカラーを取得する
+	SetLightDirection			; ライトの方向を設定する
+	GetLightDirection			; ライトの方向を取得する
+	SetLightPosition			; ライトの位置を設定する
+	GetLightPosition			; ライトの位置を取得する
+	SetLightRangeAtten			; ライトの距離減衰パラメータを設定する( 有効距離、距離減衰係数０、１、２ )
+	GetLightRangeAtten			; デフォルトライトの距離減衰パラメータを取得する( 有効距離、距離減衰係数０、１、２ )
+	SetLightAngle				; デフォルトライトのスポットライトのパラメータを設定する( 外部コーン角度、内部コーン角度 )
+	GetLightAngle				; ライトのスポットライトのパラメータを取得する( 外部コーン角度、内部コーン角度 )
+	SetLightUseShadowMap		; デフォルトライトに SetUseShadowMap で指定したシャドウマップを適用するかどうかを設定する( SmSlotIndex:シャドウマップスロット( SetUseShadowMap の第一引数に設定する値 ) UseFlag:適用にするかどうかのフラグ( TRUE:適用する( デフォルト )  FALSE:適用しない ) )
+
+	CreateDirLightHandle		; ディレクショナルライトハンドルを作成する
+	CreateSpotLightHandle		; スポットライトハンドルを作成する
+	CreatePointLightHandle		; ポイントライトハンドルを作成する
+	DeleteLightHandle			; ライトハンドルを削除する
+	DeleteLightHandleAll		; ライトハンドルを全て削除する
+	SetLightTypeHandle			; ライトハンドルのライトのタイプを変更する( DX_LIGHTTYPE_DIRECTIONAL 等 )
+	SetLightEnableHandle		; ライトハンドルのライト効果の有効、無効を設定する( TRUE:有効  FALSE:無効 )
+	SetLightDifColorHandle		; ライトハンドルのライトのディフューズカラーを設定する
+	SetLightSpcColorHandle		; ライトハンドルのライトのスペキュラカラーを設定する
+	SetLightAmbColorHandle		; ライトハンドルのライトのアンビエントカラーを設定する
+	SetLightDirectionHandle		; ライトハンドルのライトの方向を設定する
+	SetLightPositionHandle		; ライトハンドルのライトの位置を設定する
+	SetLightRangeAttenHandle	; ライトハンドルのライトの距離減衰パラメータを設定する( 有効距離、距離減衰係数０、１、２ )
+	SetLightAngleHandle			; ライトハンドルのライトのスポットライトのパラメータを設定する( 外部コーン角度、内部コーン角度 )
+	SetLightUseShadowMapHandle	; ライトハンドルのライトに SetUseShadowMap で指定したシャドウマップを適用するかどうかを設定する( SmSlotIndex:シャドウマップスロット( SetUseShadowMap の第一引数に設定する値 ) UseFlag:適用にするかどうかのフラグ( TRUE:適用する( デフォルト )  FALSE:適用しない ) )
+	GetLightTypeHandle			; ライトハンドルのライトのタイプを取得する( 戻り値は DX_LIGHTTYPE_DIRECTIONAL 等 )
+	GetLightEnableHandle		; ライトハンドルのライト効果の有効、無効を取得する( TRUE:有効  FALSE:無効 )
+	GetLightDifColorHandle		; ライトハンドルのライトのディフューズカラーを取得する
+	GetLightSpcColorHandle		; ライトハンドルのライトのスペキュラカラーを取得する
+	GetLightAmbColorHandle		; ライトハンドルのライトのアンビエントカラーを取得する
+	GetLightDirectionHandle		; ライトハンドルのライトの方向を取得する
+	GetLightPositionHandle		; ライトハンドルのライトの位置を取得する
+	GetLightRangeAttenHandle	; ライトハンドルのライトの距離減衰パラメータを取得する( 有効距離、距離減衰係数０、１、２ )
+	GetLightAngleHandle			; ライトハンドルのライトのスポットライトのパラメータを取得する( 外部コーン角度、内部コーン角度 )
+
+	GetEnableLightHandleNum		; 有効になっているライトハンドルの数を取得する
+	GetEnableLightHandle		; 有効になっているライトハンドルを取得する
+
+	; ------------------------------
+	; 色情報取得用関数
+	; ------------------------------
+	GetTexFormatIndex	; テクスチャフォーマットのインデックスを得る
+	ColorKaiseki		; 色ビット情報解析
+
+	CreatePixelFormat	; DDPIXELFORMATデータを作成する
+
+	; ------------------------------------------------------------
+	;
+	; DxMask.cpp 関数プロトタイプ宣言
+	;
+	; ------------------------------------------------------------
+
+	; ------------------------------
+	; マスク関係 
+	; ------------------------------
+	CreateMaskScreen				; マスクスクリーンを作成する
+	DeleteMaskScreen				; マスクスクリーンを削除する
+	DrawMaskToDirectData			; マスクのデータを直接セット
+	DrawFillMaskToDirectData		; マスクのデータを直接マスク画面全体に描画する
+
+	SetUseMaskScreenFlag			; マスク使用モードを変更
+	GetUseMaskScreenFlag			; マスク使用モードの取得
+	FillMaskScreen					; マスクスクリーンを指定の色で塗りつぶす
+
+	InitMask						; マスクデータを初期化する
+	MakeMask						; マスクデータの追加
+	GetMaskSize						; マスクの大きさを得る 
+	SetDataToMask					; マスクのデータをマスクに転送する
+	DeleteMask						; マスクデータを削除
+	BmpBltToMask					; マスクデータにＢＭＰデータをマスクデータと見たてて転送
+	LoadMask						; マスクデータをロードする
+	LoadDivMask						; マスクを画像から分割読みこみ
+	DrawMask						; マスクをセットする
+
+	DrawFormatStringMask			; 書式指定ありの文字列をマスクスクリーンに描画する
+	DrawFormatStringMaskToHandle	; 書式指定ありの文字列をマスクスクリーンに描画する(フォントハンドル指定版)( SetFontCacheToTextureFlag( FALSE ) ; にして作成したフォントハンドルのみ使用可能 )
+	DrawStringMask					; 文字列をマスクスクリーンに描画する
+	DrawStringMaskToHandle			; 文字列をマスクスクリーンに描画する(フォントハンドル指定版)( SetFontCacheToTextureFlag( FALSE ) ; にして作成したフォントハンドルのみ使用可能 )
+
+	DrawFillMask					; 指定のマスクを画面いっぱいに展開する	
+	SetMaskReverseEffectFlag		; マスクの数値に対する効果を逆転させる
+
+	GetMaskScreenData				; マスク画面上の描画状態を取得する
+	GetMaskUseFlag					; マスクスクリーンを使用中かフラグの取得
+
+	; ------------------------------------------------------------
+	;
+	; DxFont.cpp 関数プロトタイプ宣言
+	;
+	; ------------------------------------------------------------
+
+	; ------------------------------
+	; フォント、文字列描画関係関数
+	; ------------------------------
+	EnumFontName							; 使用可能なフォントの名前をすべて列挙する( NameBuffer に 64バイト区切りで名前が格納されます )
+	EnumFontNameEx							; 使用可能なフォントの名前をすべて列挙する( NameBuffer に 64バイト区切りで名前が格納されます )
+	EnumFontNameEx2							; 指定のフォント名のフォントを列挙する
+	CheckFontName							; 指定のフォント名のフォントが存在するかどうかをチェックする( 戻り値  TRUE:存在する  FALSE:存在しない )
+
+	InitFontToHandle						; フォントのステータスをデフォルトに戻す
+
+	CreateFontToHandle						; 新しいフォントデータを作成
+	SetFontSpaceToHandle					; 字間を変更する
+	DeleteFontToHandle						; フォントキャッシュの制御を終了する
+	SetFontLostFlag							; 解放時に TRUE にするフラグへのポインタを設定する
+
+	ChangeFont								; フォントを変更
+	ChangeFontType							; フォントタイプの変更
+	SetFontSize								; 描画するフォントのサイズをセットする
+	GetFontSize								; フォントのサイズを得る
+	SetFontThickness						; フォントの太さをセット
+	SetFontSpace							; 字間を変更する
+	GetFontSpace							; デフォルトフォントハンドルの字間を取得する
+	SetDefaultFontState						; デフォルトフォントのステータスを一括設定する
+	GetDefaultFontHandle					; デフォルトのフォントのハンドルを得る
+	GetFontMaxWidth							; 文字の最大幅を得る
+	GetDrawStringWidth						; 文字列の幅を得る
+	GetDrawFormatStringWidth				; 書式付き文字列の描画幅を得る
+	GetDrawExtendStringWidth				; 文字列の幅を得る
+	GetDrawExtendFormatStringWidth			; 書式付き文字列の描画幅を得る
+
+	GetFontMaxWidthToHandle					; 文字の最大幅を得る
+	GetFontSizeToHandle						; フォントのサイズを得る
+	GetFontSpaceToHandle					; フォントハンドルの字間を取得する
+	GetFontCharInfo							; 指定の文字の描画情報を取得する
+	GetDrawStringWidthToHandle				; 文字列の幅を得る
+	GetDrawFormatStringWidthToHandle		; 書式付き文字列の描画幅を得る
+	GetDrawExtendStringWidthToHandle		; 文字列の幅を得る
+	GetDrawExtendFormatStringWidthToHandle	; 書式付き文字列の描画幅を得る
+	GetFontStateToHandle					; フォントの情報を得る
+	CheckFontCacheToTextureFlag				; 指定のフォントがテクスチャキャッシュを使用しているかどうかを得る
+	CheckFontChacheToTextureFlag			; 指定のフォントがテクスチャキャッシュを使用しているかどうかを得る(誤字版)
+	CheckFontHandleValid					; 指定のフォントハンドルが有効か否か調べる
+
+	SetFontCacheToTextureFlag				; フォントのキャッシュにテクスチャを使用するか、フラグをセットする
+	GetFontCacheToTextureFlag				; フォントにテクスチャキャッシュを使用するかどうかを取得する
+	SetFontChacheToTextureFlag				; フォントのキャッシュにテクスチャを使用するか、フラグをセットする(誤字版)
+	SetFontCacheTextureColorBitDepth		; フォントのキャッシュとして使用するテクスチャのカラービット深度を設定する( 16 又は 32 のみ指定可能  デフォルトは 32 )
+	GetFontCacheTextureColorBitDepth		; フォントのキャッシュとして使用するテクスチャのカラービット深度を取得する
+	SetFontCacheCharNum						; フォントキャッシュでキャッシュできる文字数を指定する
+	GetFontCacheCharNum						; フォントキャッシュでキャッシュできる文字数を取得する( 戻り値  0:デフォルト  1以上:指定文字数 )
+	SetFontCacheUsePremulAlphaFlag			; フォントキャッシュとして保存する画像の形式を乗算済みαチャンネル付き画像にするかどうかを設定する( TRUE:乗算済みαを使用する  FLASE:乗算済みαを使用しない( デフォルト ) )
+	GetFontCacheUsePremulAlphaFlag			; フォントキャッシュとして保存する画像の形式を乗算済みαチャンネル付き画像にするかどうかを取得する
+
+	FontCacheStringDrawToHandle				; コメント無し
+	FontBaseImageBlt						; 基本イメージに文字列イメージを転送する
+	FontBaseImageBltToHandle				; 基本イメージに文字列イメージを転送する
+; ----------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	;;;;;GetMaskSurface					; マスクサーフェスを取得する
+	;GetMaskMemImg					; マスクサーフェスの代わりの MEMIMG を取得する
+
+
+	;;;;;SetMaskTransColor				; マスクに使う透過色のセット
+
+
+
+
+
+	GetLightRangeAtten					; ライトの距離減衰パラメータを取得する( 有効距離、距離減衰係数０、１、２ )
+
+	CreateDirLightHandle				; ディレクショナルライトハンドルを作成する
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	SetGraphicsDeviceRestoreCallbackFunction	; グラフィックスデバイスがロストから復帰した際に呼ばれるコールバック関数を設定する
+	SetGraphicsDeviceRestoreCallbackFunction	; グラフィックスデバイスがロストから復帰した際に呼ばれるコールバック関数を設定する
+
+	DrawStringToZBuffer							; Ｚバッファに対して文字列の描画
+	DrawVStringToZBuffer						; Ｚバッファに対して文字列の描画
+	DrawStringToHandleToZBuffer					; Ｚバッファに対して文字列を描画する
+	DrawVStringToHandleToZBuffer				; Ｚバッファに対して文字列を描画する
+	DrawFormatStringToZBuffer					; Ｚバッファに対して書式指定文字列を描画する
+	DrawFormatVStringToZBuffer					; Ｚバッファに対して書式指定文字列を描画する
+	DrawFormatStringToHandleToZBuffer			; Ｚバッファに対して書式指定文字列を描画する
+	DrawFormatVStringToHandleToZBuffer			; Ｚバッファに対して書式指定文字列を描画する
+	DrawExtendStringToZBuffer					; Ｚバッファに対して文字列の拡大描画
+	DrawExtendVStringToZBuffer					; Ｚバッファに対して文字列の拡大描画
+	DrawExtendStringToHandleToZBuffer			; Ｚバッファに対して文字列を拡大描画する
+	DrawExtendVStringToHandleToZBuffer			; Ｚバッファに対して文字列を拡大描画する
+	DrawExtendFormatStringToZBuffer				; Ｚバッファに対して書式指定文字列を拡大描画する
+	DrawExtendFormatVStringToZBuffer			; Ｚバッファに対して書式指定文字列を拡大描画する
+	DrawExtendFormatStringToHandleToZBuffer		; Ｚバッファに対して書式指定文字列を拡大描画する
+	DrawExtendFormatVStringToHandleToZBuffer	; Ｚバッファに対して書式指定文字列を拡大描画する
+
+	;;;;;SetPalette				; パレットのセット
+	;;;;;ReflectionPalette		; セットしたパレットをハードウエアに反映させる
+	;;;;;GetPalette				; パレットの取得
+	;;;;;SetBmpPal				; ＢＭＰファイルのパレットを反映させる
+	;;;;;SetBmpPalPart			; ＢＭＰファイルからのパレットの部分取得
+
+
+
+	SetUseDXArchiveFlag								; ＤＸアーカイブファイルの読み込み機能を使うかどうかを設定する( FALSE:使用しない  TRUE:使用する )
+	SetDXArchivePriority							; ＤＸアーカイブファイルと通常のフォルダのどちらも存在した場合、どちらを優先させるかを設定する( 1:フォルダを優先 0:ＤＸアーカイブファイルを優先(デフォルト) )
+	SetDXArchiveExtension							; 検索するＤＸアーカイブファイルの拡張子を変更する
+	SetDXArchiveKeyString							; ＤＸアーカイブファイルの鍵文字列を設定する
+	SetUseDateNameLogFile							; ログファイル名に日付をつけるかどうかをセットする
+	SetLogFontSize									; printfDx で画面に出力するログフォントのサイズを変更する
+
+	; ------------------------------
+	; メモリに置かれたデータをファイルのデータに例えてつかうための関数
+	; ------------------------------
+	MemStreamOpen	; コメントなし
+	MemStreamClose	; コメントなし
+
+;#ifndef DX_NOTUSE_DRAWFUNCTION
+
+	; ------------------------------------------------------------
+	;
+	; DxDraw.cpp関数プロトタイプ宣言
+	;
+	; ------------------------------------------------------------
+
+	; ------------------------------
+	; 設定関係関数
+	; ------------------------------
+	;;;;;Set2D3DKyouzonFlag				; ３Ｄと２Ｄの共存率を上げるフラグのセット
+	;;;;;SetUseTempFrontScreen	
+
+	; ------------------------------
+	; ＤｉｒｅｃｔＤｒａｗ関係情報提供関数
+	; ------------------------------
+	;;;;;GetBmpSurf3DRenderingValidState; 指定のインデックスのビットマップデータが３Ｄデバイスによる描画が可能かどうかを取得する( TRUE:出来る  FALSE:出来ない )
+	;;;;;GetDrawTargetSurface			; 描画対象となっているサーフェスを取得
+	;;;;;GetPrimarySurface				; プライマリサーフェスを取得
+	;;;;;GetBackSurface					; バックサーフェスを取得
+	;;;;;GetWorkSurface					; 作業用サーフェスを取得
+	;;;;;GetDesktopDrawCmp				; デスクトップ画面への描画かの判定情報
+	;;;;;GetUseDirectDrawFlag			; ＤｉｒｅｃｔＤｒａｗを使用するかどうかを取得する
+	GetColorBitDepth				; 画面の色ビット深度を得る
+	GetPixelFormat					; ピクセルフォーマットの取得
+	;;;;;GetOverlayPixelFormat			; 使用できるオーバーレイのピクセルフォーマットを得る
+	;;;;;GetDirectDrawCaps				; DirectDraw の情報を得る
+	;;;;;GetNotDraw3DFlag				; NotDraw3DFlag を取得する
+	;;;;;GetDrawScreenDC					; 描画先になっている画面のＤＣを取得する
+	;;;;;ReleaseDrawScreenDC				; GetScreenDC で取得したＤＣを解放する
+	;;;;;GetUseMEMIMGFlag				; MEMIMG 構造体を使用するかどうかを取得する
+	;;;;;GetVSyncTime					; 垂直同期信号一回に付きかかる時間をミリ秒単位で取得する
+
+	; ------------------------------
+	; 簡易グラフィック関係関数
+	; ------------------------------
+	;BltFastOrBitBlt		; (消滅)指定のサーフェスから指定のサーフェスへグラフィックデータを転送する
+
+	; ------------------------------
+	; 画面操作関係関数
+	; ------------------------------
+	;;;;;GraphCopy									; 画像の内容をコピーする
+
+	; ------------------------------
+	; ＢＭＰ保存関数
+	; ------------------------------
+
+	; ------------------------------------------------------------
+	;
+	; Dx3D.cpp関数プロトタイプ宣言
+	;
+	; ------------------------------------------------------------
+
+	; ------------------------------
+	; 設定関係
+	; ------------------------------
+	;;;;;GetUseD3DDevObj					; 使用中のＤｉｒｅｃｔ３ＤＤｅｖｉｃｅオブジェクトを得る
+	;;;;;SetUseVertexBufferFlag			; 頂点バッファを使用するかどうかを設定する
+	;RenderVertexBuffer				; 頂点バッファに溜まった頂点データを吐き出す
+	;GetVertexBuffer				; 追加頂点バッファの頂点追加アドレスを得る( 戻り値はテクスチャなしの場合は VERTEX_NOTEX_2D となる )
+	;_DrawPreparation				; 描画準備を行う( ParamFlag は DRAWPREP_TRANS 等 )
+	;Add4VertexBuffer				; GetVertexTo3DDevice によって４頂点追加されたことを前提に頂点追加処理を行う
+	;AddVertexBuffer				; GetVertexTo3DDevice によって指定数頂点が追加されたことを前提に頂点追加処理を行う
+	;SetGraphTexture				; Ｄｉｒｅｃｔ３Ｄデバイスにテクスチャをセットする
+
+	; ------------------------------
+	; その他補助関数
+	; ------------------------------
+;?	GetTexPixelFormat		; ピクセルフォーマットを得る
+;?	GetTexPixelFormat		; フォーマットに基づいたカラーフォーマットを得る
+;?	GetTexColorData			; フォーマットに基づいたカラーデータを得る
+;?	GetTexPixelFormat		; 指定のフォーマットインデックスのカラーフォーマットを得る
+;?	GetTexColorData			; 指定のフォーマットインデックスのカラーデータを得る
+	;;;;;GetZBufferPixelFormat	; 指定のビット深度のＺバッファーのピクセルフォーマットを得る( 現在のところ 16 ビットのみ )
+
+;#ifndef DX_NON_MOVIE
+	;;;;;OpenMovieToOverlay				; オーバーレイサーフェスを使用したムービーファイルのオープン
+	;;;;;UpdateMovieToOverlay			; オーバーレイサーフェスを使用したムービーの表示ステータスセット
+	;;;;;CloseMovieToOverlay			; オーバーレイサーフェスを使用したムービーファイルを閉じる
+;#endif
+	;;;;;SetGraphTransColor				; 画像の透過色を変更する(アルファチャンネル使用時は無効)
+
+	;;;;;RestoreGraph					; 画像データのリストア
+	;;;;;AllRestoreGraph				; すべての画像データのリストア
+
+
+	; ------------------------------
+	; グラフィック描画関係関数
+	; ------------------------------
+
+	DrawString									; 文字列の描画
+	DrawVString									; 文字列の描画
+	DrawStringToHandle							; 文字列を描画する
+	DrawVStringToHandle							; 文字列を描画する
+	DrawFormatString							; 書式指定文字列を描画する
+	DrawFormatVString							; 書式指定文字列を描画する
+	DrawFormatStringToHandle					; 書式指定文字列を描画する
+	DrawFormatVStringToHandle					; 書式指定文字列を描画する
+	DrawExtendString							; 文字列の拡大描画
+	DrawExtendVString							; 文字列の拡大描画
+	DrawExtendStringToHandle					; 文字列を拡大描画する
+	DrawExtendVStringToHandle					; 文字列を拡大描画する
+	DrawExtendFormatString						; 書式指定文字列を拡大描画する
+	DrawExtendFormatVString						; 書式指定文字列を拡大描画する
+	DrawExtendFormatStringToHandle				; 書式指定文字列を拡大描画する
+	DrawExtendFormatVStringToHandle				; 書式指定文字列を拡大描画する
+
+	DrawNumberToI								; 整数型の数値を描画する
+	DrawNumberToF								; 浮動小数点型の数値を描画する
+	DrawNumberPlusToI							; 整数型の数値とその説明の文字列を一度に描画する
+	DrawNumberPlusToF							; 浮動小数点型の数値とその説明の文字列を一度に描画する
+
+	DrawNumberToIToHandle						; 整数型の数値を描画する
+	DrawNumberToFToHandle						; 浮動小数点型の数値を描画する
+	DrawNumberPlusToIToHandle					; 整数型の数値とその説明の文字列を一度に描画する
+	DrawNumberPlusToFToHandle					; 浮動小数点型の数値とその説明の文字列を一度に描画する
+
+
+;#ifndef DX_NON_DIRECTX9
+
+
+
+;#endif ; DX_NON_DIRECTX9
+
+	; ------------------------------
+	; ３Ｄ描画関係関数
+	; ------------------------------
+	;SetColorVertexState	; ３Ｄ頂点データをセットする  
+
+
+	; ------------------------------
+	; グラフィック情報取得関係関数
+	; ------------------------------
+	;GetGraphHandle					; 自分のグラフィックインデックス番号を取得する
+	;GetGraphData					; グラフィックのデータをインデックス値から取り出す
+
+
+
+
+
+	; ------------------------------
+	; 画像作成用関係
+	; ------------------------------
+	;SetGraphName		; 特定のファイルから画像を読み込んだ場合のファイルパスをセットする
+	CreateDXGraph		; GraphImage データからサイズを割り出し、それに合ったグラフィックハンドルを作成する
+	;CreateDXDivGraph	; GraphImage データに合ったサイズの分割グラフィックハンドルを作成する
+
+;#ifndef DX_NON_MOVIE
+
+
+;#endif
+
+	; ------------------------------------------------------------
+	;
+	; DxGraphicsBase.cpp 関数プロトタイプ宣言
+	;
+	; ------------------------------------------------------------
+
+
+; 基本イメージ描画
+	DrawBaseImage	; 基本イメージデータを描画する
+
+
+
+
+	; ------------------------------------------------------------
+	;
+	; DxMask.cpp 関数プロトタイプ宣言
+	;
+	; ------------------------------------------------------------
+
+;#ifndef DX_NON_MASK
+
+
+;#endif
+
+	; ------------------------------------------------------------
+	;
+	; DxMovie.cpp 関数プロトタイプ宣言
+	;
+	; ------------------------------------------------------------
+
+	; ------------------------------------------------------------
+	;
+	; DxFont.cpp 関数プロトタイプ宣言
+	;
+	; ------------------------------------------------------------
+
+
+	GetFontChacheToTextureFlag				; フォントにテクスチャキャッシュを使用するかどうかを取得する(誤字版)
+	;GetFontManageDataToHandle				; フォント管理データの取得
+	MultiByteCharCheck						; ２バイト文字か調べる( TRUE:２バイト文字  FALSE:１バイト文字 )
+
+	; ------------------------------------------------------------
+	;
+	; DxMath.cpp 関数プロトタイプ宣言
+	;
+	; ------------------------------------------------------------
+
+	; ------------------------------
+	; 演算ライブラリ
+	; ------------------------------
+	CreateIdentityMatrix				; 単位行列を作成する
+	CreateLookAtMatrix					; ビュー行列を作成する
+	CreateLookAtMatrix2					; ビュー行列を作成する
+	CreateLookAtMatrixRH				;
+	CreateMultiplyMatrix				; 行列の積を求める
+	CreatePerspectiveFovMatrix			; 射影行列を作成する
+	CreatePerspectiveFovMatrixRH		;
+	CreateOrthoMatrix					; 正射影行列を作成する
+	CreateOrthoMatrixRH					;
+	CreateScalingMatrix					; スケーリング行列を作成する
+	CreateRotationXMatrix				; Ｘ軸を中心とした回転行列を作成する
+	CreateRotationYMatrix				; Ｙ軸を中心とした回転行列を作成する
+	CreateRotationZMatrix				; Ｚ軸を中心とした回転行列を作成する
+	CreateTranslationMatrix				; 平行移動行列を作成する
+	CreateTransposeMatrix				; 転置行列を作成する
+	CreateInverseMatrix					; 逆行列を作成する
+	CreateViewportMatrix				; ビューポート行列を作成する
+	CreateRotationXYZMatrix				; Ｘ軸回転→Ｙ軸回転→Ｚ軸回転を合成した行列を作成する
+	CreateRotationXZYMatrix				; Ｘ軸回転→Ｚ軸回転→Ｙ軸回転を合成した行列を作成する
+	CreateRotationYXZMatrix				; Ｙ軸回転→Ｘ軸回転→Ｚ軸回転を合成した行列を作成する
+	CreateRotationYZXMatrix				; Ｙ軸回転→Ｚ軸回転→Ｘ軸回転を合成した行列を作成する
+	CreateRotationZXYMatrix				; Ｚ軸回転→Ｘ軸回転→Ｙ軸回転を合成した行列を作成する
+	CreateRotationZYXMatrix				; Ｚ軸回転→Ｙ軸回転→Ｘ軸回転を合成した行列を作成する
+	GetMatrixXYZRotation				;
+	GetMatrixXZYRotation				;
+	GetMatrixYXZRotation				;
+	GetMatrixYZXRotation				;
+	GetMatrixZXYRotation				;
+	GetMatrixZYXRotation				;
+	VectorNormalize						; ベクトルを正規化する
+	VectorScale							; ベクトルをスカラー倍する
+	VectorMultiply						; ベクトルの掛け算をする
+	VectorSub							; Out = In1 - In2 のベクトル計算をする 
+	VectorAdd							; Out = In1 + In2 のベクトル計算をする 
+	VectorOuterProduct					; In1とIn2の外積を計算する
+	VectorInnerProduct					; In1とIn2の内積を計算する
+	VectorRotationX						; ベクトルのＸ軸を軸にした回転を行う
+	VectorRotationY						; ベクトルのＹ軸を軸にした回転を行う
+	VectorRotationZ						; ベクトルのＺ軸を軸にした回転を行う
+	VectorTransform						;
+	VectorTransform4					;
+
+	TriangleBarycenter					; 指定の座標から三角形の重心を求める
+
+	Segment_Segment_MinLength			; 二つの線分の最近点間の距離を得る
+	Segment_Segment_MinLength_Square	; 二つの線分の最近点間の距離の二乗を得る
+	Segment_Triangle_MinLength			; 線分と三角形の最近点間の距離を得る 
+	Segment_Triangle_MinLength_Square	; 線分と三角形の最近点間の距離の二乗を得る 
+	Segment_Point_MinLength				; 線分と点の一番近い距離を得る
+	Segment_Point_MinLength_Square		; 線分と点の一番近い距離の二乗を得る
+	Triangle_Point_MinLength			; 三角形と点の一番近い距離を得る
+	Triangle_Point_MinLength_Square		; 三角形と点の一番近い距離の二乗を得る
+	Plane_Point_MinLength_Position		; 点に一番近い平面上の座標を得る
+	Plane_Point_MinLength				; 平面と点の一番近い距離を得る
+
+	HitCheck_Line_Triangle				; 三角形と線の当たり判定
+	HitCheck_Triangle_Triangle			; 三角形と三角形の当たり判定	
+	HitCheck_Line_Sphere				;
+	HitCheck_Sphere_Sphere				;
+	HitCheck_Sphere_Triangle			;
+	HitCheck_Capsule_Capsule			;
+	HitCheck_Capsule_Triangle			;
+
+	; ------------------------------
+	; その他
+	; ------------------------------
+	RectClipping	; 矩形のクリッピング
+	RectAdjust		; 矩形の left が right より値が大きい場合などの誤りを補正する
+	GetRectSize		; 矩形の幅と高さを求める
+
+	; ------------------------------
+	; 表記簡略版
+	; ------------------------------
+	MGetIdent		; 単位行列を得る
+	MMult			; 行列の乗算を行う
+	MScale			; 行列のスケーリングを行う
+	MAdd			; 行列の足し算を行う
+	MGetScale		; 拡大行列を得る
+	MGetRotX		; Ｘ軸回転行列を得る
+	MGetRotY		; Ｙ軸回転行列を得る
+	MGetRotZ		; Ｚ軸回転行列を得る
+	MGetRotAxis		; 指定軸で指定角度回転する行列を得る
+	MGetRotVec2		;
+	MGetTranslate	; 平行移動行列を得る
+	MGetAxis1		;
+	MGetAxis2		;
+	MTranspose		; 転置行列を得る
+	MInverse		; 逆行列を得る
+	MGetSize		; 拡大行列のＸ軸、Ｙ軸、Ｚ軸の拡大率を得る
+	VGet			; ベクトル値の生成
+;?	F4Get			; ４要素ベクトル値の生成
+	VAdd			; ベクトルの加算
+	VSub			; ベクトルの減算
+;?	F4Add			; ４要素ベクトルの加算
+;?	F4Sub			; ４要素ベクトルの減算
+	VDot			; ベクトルの内積
+	VCross			; ベクトルの外積
+	VScale			; ベクトルのスケーリング
+;?	F4Scale			; ４要素ベクトルのスケーリング
+	VNorm			; ベクトルの正規化
+	VSize			; ベクトルのサイズ
+	VSquareSize		; ベクトルのサイズの２乗
+	VTransform		; 行列を使った座標変換
+	VTransformSR	; 行列を使った座標変換	
+	VCos			; 二つのベクトルが成す角のコサイン値を得る
+	VRad			; 二つのベクトルが成す角の角度を得る	
+
+	; ------------------------------------------------------------
+	;
+	; DxBaseImage.cpp 関数プロトタイプ宣言
+	;
+	; ------------------------------------------------------------
+
+	; ------------------------------
+	; 基本イメージデータのロード＋ＤＩＢ関係
+	; ------------------------------
+	CreateGraphImageOrDIBGraph		; 登録されている各種グラフィックローダ関数から、ＢＭＰデータもしくは GraphImageデータを構築する
+	CreateGraphImageType2			;
+
+	CreateBmpInfo					; フルカラー形式のBITMAPINFO構造体を作成する
+	CreateDIBGraphVer2				;
+	CreateDIBGraphVer2_plus_Alpha	; ＤＩＢグラフィックを作成する
+	GetGraphImageFullColorCode		; BASEIMAGE 構造体の画像情報から指定の座標のフルカラーコードを取得する
+	CreateGraphImage_plus_Alpha		; 各種グラフィックデータからグラフィックイメージデータとアルファマップ用イメージデータを構築する
+	ReverseGraphImage				; 指定の GraphImage を左右反転する
+	ConvBitmapToGraphImage			;
+	ConvGraphImageToBitmap			;
+	CreateDIBGraph					; ＤＩＢグラフィックを作成する
+	CreateDIBGraphToMem				; ＤＩＢグラフィックをメモリイメージから作成する
+	CreateDIBGraph_plus_Alpha		; ファイルからＤＩＢグラフィックとマスクグラフィックを作成する
+
+	;AddUserGraphLoadFunction		; ユーザー定義のグラフィックロード関数を登録する
+	;AddUserGraphLoadFunction2		; ユーザー定義のグラフィックロード関数を登録する
+	;AddUserGraphLoadFunction3		; ユーザー定義のグラフィックロード関数Ver3を登録する
+	AddUserGraphLoadFunction4		; ユーザー定義のグラフィックロード関数Ver4を登録する
+	;SubUserGraphLoadFunction		; ユーザー定義のグラフィックロード関数を登録から抹消する
+	;SubUserGraphLoadFunction2		; ユーザー定義のグラフィックロード関数を登録から抹消する
+	;SubUserGraphLoadFunction3		; ユーザー定義のグラフィックロード関数Ver3を登録から抹消する
+	SubUserGraphLoadFunction4		; ユーザー定義のグラフィックロード関数Ver4を登録から抹消する
+
+	SetUseFastLoadFlag				; 高速読み込みルーチンを使うか否かのフラグをセットする
+	GetGraphDataShavedMode			; グラフィック減色時の画像劣化緩和処理モードの取得
+	SetGraphDataShavedMode			; グラフィック減色時の画像劣化緩和処理モードの変更
+
+	; ------------------------------
+	; 基本イメージデータ機能公開用関数
+	; ------------------------------
+	InitSoftImage					; ソフトウエアで扱うイメージを全て解放する
+	LoadSoftImage					;
+	LoadSoftImageToMem				;
+	MakeSoftImage					;
+	MakeARGB8ColorSoftImage			;
+	MakeXRGB8ColorSoftImage			;
+	MakeARGB4ColorSoftImage			;
+	MakeRGB8ColorSoftImage			;
+	MakePAL8ColorSoftImage			;
+
+	DeleteSoftImage					; ソフトウエアで扱うイメージの解放
+
+	GetSoftImageSize				; ソフトウエアで扱うイメージのサイズを取得する
+	CheckPaletteSoftImage			;
+	CheckAlphaSoftImage				;
+	CheckPixelAlphaSoftImage		;
+
+	GetDrawScreenSoftImage			; 描画対象の画面から指定領域のグラフィックをソフトウエアで扱うイメージに転送する
+	UpdateLayerdWindowForSoftImage	;
+	FillSoftImage					;
+	ClearRectSoftImage				; ソフトウエアで扱うイメージの指定の領域を０クリアする
+	GetPaletteSoftImage				;
+	SetPaletteSoftImage				;
+	DrawPixelPalCodeSoftImage		;
+	GetPixelPalCodeSoftImage		;
+	GetImageAddressSoftImage		; ソフトウエアで扱うイメージの実イメージが格納されているメモリ領域の先頭アドレスを取得する
+	DrawPixelSoftImage				;
+	DrawPixelSoftImage_Unsafe_XRGB8	; ソフトウエアで扱うイメージの指定座標にドットを描画する(各色要素は０～２５５)、エラーチェックをしない代わりに高速ですが、範囲外の座標や ARGB8 以外のフォーマットのソフトハンドルを渡すと不正なメモリアクセスで強制終了します
+	DrawPixelSoftImage_Unsafe_ARGB8	; ソフトウエアで扱うイメージの指定座標にドットを描画する(各色要素は０～２５５)、エラーチェックをしない代わりに高速ですが、範囲外の座標や XRGB8 以外のフォーマットのソフトハンドルを渡すと不正なメモリアクセスで強制終了します
+	GetPixelSoftImage				; ソフトウエアで扱うイメージの指定座標の色を取得する(各色要素は０～２５５)
+	GetPixelSoftImage_Unsafe_XRGB8	; ソフトウエアで扱うイメージの指定座標の色を取得する(各色要素は０～２５５)、エラーチェックをしない代わりに高速ですが、範囲外の座標や XRGB8 以外のフォーマットのソフトハンドルを渡すと不正なメモリアクセスで強制終了します
+	GetPixelSoftImage_Unsafe_ARGB8	; ソフトウエアで扱うイメージの指定座標の色を取得する(各色要素は０～２５５)、エラーチェックをしない代わりに高速ですが、範囲外の座標や ARGB8 以外のフォーマットのソフトハンドルを渡すと不正なメモリアクセスで強制終了します
+	DrawLineSoftImage				; ソフトウエアで扱うイメージの指定座標に線を描画する(各色要素は０～２５５)
+	BltSoftImage					; ソフトウエアで扱うイメージを別のイメージ上に転送する
+	BltSoftImageWithTransColor		; ソフトウエアで扱うイメージを透過色処理付きで転送する
+	BltSoftImageWithAlphaBlend		;
+	ReverseSoftImageH				; ソフトウエアで扱うイメージの左右を反転する
+	ReverseSoftImageV				; ソフトウエアで扱うイメージの上下を反転する
+	ReverseSoftImage				; ソフトウエアで扱うイメージの上下左右を反転する
+
+	BltStringSoftImage				; ソフトウエアで扱うイメージに文字列イメージを転送する
+	BltStringSoftImageToHandle		; ソフトウエアで扱うイメージに文字列イメージを転送する	
+
+	DrawSoftImage					; ソフトウエアで扱うイメージを画面に描画する
+
+	SaveSoftImageToBmp				; ソフトウエアで扱うイメージをＢＭＰ画像ファイルとして保存する
+;#ifndef DX_NON_PNGREAD
+	SaveSoftImageToPng				; ソフトウエアで扱うイメージをＰＮＧ画像ファイルとして保存する CompressionLevel = 圧縮率、値が大きいほど高圧縮率高負荷、０は無圧縮,0～9
+;#endif
+;#ifndef DX_NON_JPEGREAD
+	SaveSoftImageToJpeg				; ソフトウエアで扱うイメージをＪＰＥＧ画像ファイルとして保存する Quality = 画質、値が大きいほど低圧縮高画質,0～100 
+;#endif
+
+	; ------------------------------
+	; 基本イメージデータ構造体関係
+	; ------------------------------
+	CreateBaseImage					; 各種グラフィックデータから基本イメージデータを構築する
+	CreateGraphImage				; CreateBaseImage の旧名称
+	CreateBaseImageToFile			; 画像ファイルから基本イメージデータを構築する
+	CreateBaseImageToMem			; メモリ上に展開された画像ファイルから基本イメージデータを構築する
+	CreateARGB8ColorBaseImage		; ＡＲＧＢ８カラーの空の基本イメージデータを作成する
+	CreateXRGB8ColorBaseImage		; ＸＲＧＢ８カラーの空の基本イメージデータを作成する
+	CreateRGB8ColorBaseImage		; ＲＧＢ８カラーの空の基本イメージデータを作成する
+	CreateARGB4ColorBaseImage		; ＡＲＧＢ４カラーの空の基本イメージデータを作成する
+	CreatePAL8ColorBaseImage		; パレット８ビットカラーの空の基本イメージデータを作成する
+	CreateColorDataBaseImage		; 指定のカラーフォーマットの殻の基本イメージデータを作成する
+	GetBaseImageGraphDataSize	
+
+	ReleaseBaseImage				; 基本イメージデータの後始末を行う
+	ReleaseGraphImage				; ReleaseBaseImage の旧名称
+
+	ConvertNormalFormatBaseImage	; DX_BASEIMAGE_FORMAT_NORMAL 以外の形式のイメージデータを DX_BASEIMAGE_FORMAT_NORMAL 形式のイメージに変換する
+
+	GetDrawScreenBaseImage			; 描画対象の画面から指定領域のグラフィックを基本イメージデータに転送する
+	UpdateLayerdWindowForBaseImage	; 基本イメージを使用して UpdateLayerdWindow を行う
+	FillBaseImage					; 基本イメージデータを指定の色で塗りつぶす
+	ClearRectBaseImage				; 基本イメージデータの指定の領域を０クリアする
+	GetPaletteBaseImage				; 基本イメージデータのパレットを取得する
+	SetPaletteBaseImage				; 基本イメージデータのパレットをセットする
+	SetPixelPalCodeBaseImage		;
+	GetPixelPalCodeBaseImage		;
+	SetPixelBaseImage				;
+	GetPixelBaseImage				;
+	DrawLineBaseImage				;
+;?	BltBaseImage					; 基本イメージデータを転送する
+;?	BltBaseImage					; 基本イメージデータを転送する
+	BltBaseImageWithTransColor		; 基本イメージデータを透過色処理付きで転送する
+	BltBaseImageWithAlphaBlend		;
+	ReverseBaseImageH				; 基本イメージデータの左右を反転する
+	ReverseBaseImageV				; 基本イメージデータの上下を反転する
+	ReverseBaseImage				; 基本イメージデータの上下左右を反転する
+	CheckPixelAlphaBaseImage		;
+
+	SaveBaseImageToBmp				; 基本画像データをＢＭＰ画像として保存する
+;#ifndef DX_NON_PNGREAD
+	SaveBaseImageToPng				; 基本画像データをＰＮＧ画像として保存する
+;#endif
+;#ifndef DX_NON_JPEGREAD
+	SaveBaseImageToJpeg				; 基本画像データをＪＰＥＧ画像として保存する
+;#endif
+
+	; ------------------------------
+	; カラーマッチングしながらグラフィックデータ間転送を行う Ver2
+	; ------------------------------
+	GraphColorMatchBltVer2	;
+
+	; ------------------------------
+	; 色情報取得関係
+	; ------------------------------
+	GetColorF				; 不動小数点型のカラー値を作成する
+	GetColorU8				; 符号なし整数８ビットのカラー値を作成する
+	GetColor				; ３原色値から現在の画面モードに対応した色データ値を得る
+	GetColor2				; 画面モードに対応した色データ値から個々の３原色データを抜き出す
+	GetColor3				; ３原色値から指定のピクセルフォーマットに対応した色データ値を得る
+	GetColor4				; ２つのカラーフォーマット間のデータ変換を行った情報を得る 
+	GetColor5				; 指定カラーフォーマットに対応した色データ値から個々の３原色データを抜き出す
+	CreatePaletteColorData	; パレットカラーのカラー情報を構築する
+	CreateXRGB8ColorData	; ＸＲＧＢ８カラーのカラー情報を構築する
+	CreateARGB8ColorData	; ＡＲＧＢ８カラーのカラー情報を構築する
+	CreateARGB4ColorData	; ＡＲＧＢ４カラーのカラー情報を構築する
+	CreateFullColorData		; フルカラーＤＩＢのカラー情報を構築する
+	CreateGrayColorData		; グレースケールのカラー情報を構築する
+	CreatePal8ColorData		; パレット２５６色のカラー情報を構築する
+	CreateColorData			; カラーデータを作成する
+	SetColorDataNoneMask	; NoneMask 以外の要素を埋めた COLORDATA 構造体の情報を元に NoneMask をセットする
+	CmpColorData			;
+
+;#endif ; DX_NOTUSE_DRAWFUNCTION
+
+	; ------------------------------------------------------------
+	;
+	; DxSound.cpp関数プロトタイプ宣言
+	;
+	; ------------------------------------------------------------
+
+	; ------------------------------
+	; サウンドデータ管理系関数
+	; ------------------------------
+	InitSoundMem						; メモリに読みこんだWAVEデータを削除し、初期化する
+
+	AddSoundData						; 新しいサウンドデータ領域を確保する
+	AddStreamSoundMem					; ストリーム風サウンドデータにサウンドデータを追加する
+	AddStreamSoundMemToMem				; ストリーム風サウンドデータにサウンドデータを追加する
+	AddStreamSoundMemToFile				; ストリーム風サウンドデータにサウンドデータを追加する
+	SetupStreamSoundMem					; ストリーム風サウンドデータの再生準備を行う
+	PlayStreamSoundMem					; ストリーム風サウンドデータの再生開始
+	CheckStreamSoundMem					; ストリーム風サウンドデータの再生状態を得る
+	StopStreamSoundMem					; ストリーム風サウンドデータの再生終了
+	SetStreamSoundCurrentPosition		;
+	GetStreamSoundCurrentPosition		; サウンドハンドルの再生位置をバイト単位で取得する
+	SetStreamSoundCurrentTime			;
+	GetStreamSoundCurrentTime			;
+	ProcessStreamSoundMem				; ストリームサウンドの再生処理関数
+	ProcessStreamSoundMemAll			; 有効なストリームサウンドのすべて再生処理関数にかける
+
+
+	LoadSoundMem2						; 前奏部とループ部に分かれたサウンドデータの作成
+	LoadBGM								; 主にＢＧＭを読み込むのに適した関数
+
+	LoadSoundMemBase					; サウンドデータを追加する
+	LoadSoundMem						; サウンドデータを追加する
+	LoadSoundMemToBufNumSitei			; 同時再生数指定型サウンド追加関数
+	LoadSoundMemByResource				; サウンドをリソースから読み込む
+	DuplicateSoundMem					;
+
+	LoadSoundMemByMemImageBase			;
+	LoadSoundMemByMemImage				;
+	LoadSoundMemByMemImage2				; メモリ上に展開されたファイルイメージからハンドルを作成する2
+	LoadSoundMemByMemImageToBufNumSitei	; メモリ上に展開されたファイルイメージからハンドルを作成する
+	LoadSoundMem2ByMemImage				; メモリ上に展開されたファイルイメージから前奏部とループ部に分かれたハンドルを作成する
+	LoadSoundMemFromSoftSound			; ソフトウエアで波形を制御するサウンドデータからサウンドハンドルを作成する
+
+	DeleteSoundMem						; メモリに読み込んだWAVEデータを削除する
+
+	PlaySoundMem						; メモリに読みこんだWAVEデータを再生する
+	StopSoundMem						; メモリに読み込んだWAVEデータの再生を止める
+	CheckSoundMem						; メモリに読みこんだWAVEデータが再生中か調べる
+	SetPanSoundMem						; メモリに読みこんだWAVEデータの再生にパンを設定する
+	ChangePanSoundMem					; サウンドハンドルのパンを設定する( -255 ～ 255 )
+	GetPanSoundMem						; メモリに読みこんだWAVEデータの再生にパンを取得する
+	SetVolumeSoundMem					;
+	ChangeVolumeSoundMem				;
+	GetVolumeSoundMem					; メモリに読みこんだWAVEデータの再生のボリュームを取得する
+	SetFrequencySoundMem				; メモリに読み込んだWAVEデータの再生周波数を設定する
+	GetFrequencySoundMem				; メモリに読み込んだWAVEデータの再生周波数を取得する
+	ResetFrequencySoundMem				; メモリに読み込んだWAVEデータの再生周波数を読み込み直後の状態に戻す
+
+	SetNextPlayPanSoundMem				; メモリに読みこんだWAVEデータの次の再生にのみ使用するパンを設定する
+	SetNextPlayVolumeSoundMem			;
+	ChangeNextPlayVolumeSoundMem		;
+	SetNextPlayFrequencySoundMem		; メモリに読み込んだWAVEデータの次の再生にのみ使用する再生周波数を設定する
+
+	SetCurrentPositionSoundMem			;
+	GetCurrentPositionSoundMem			; サウンドハンドルの再生位置をサンプル単位で取得する
+	SetSoundCurrentPosition				;
+	GetSoundCurrentPosition				; サウンドハンドルの再生位置をバイト単位で取得する
+	SetSoundCurrentTime					;
+	GetSoundCurrentTime					;
+	GetSoundTotalSample					;
+	GetSoundTotalTime					;
+
+	SetLoopPosSoundMem					; サウンドハンドルにループ位置を設定する
+	SetLoopTimePosSoundMem				; サウンドハンドルにループ位置を設定する
+	SetLoopSamplePosSoundMem			; サウンドハンドルにループ位置を設定する
+
+	SetLoopStartTimePosSoundMem			; サウンドハンドルにループ開始位置を設定する
+	SetLoopStartSamplePosSoundMem		; サウンドハンドルにループ開始位置を設定する
+
+	; ------------------------------
+	; 設定関係関数
+	; ------------------------------
+	SetCreateSoundDataType			;
+	GetCreateSoundDataType			;
+	SetDisableReadSoundFunctionMask	;
+	GetDisableReadSoundFunctionMask	;
+	SetEnableSoundCaptureFlag		; サウンドキャプチャを前提とした動作をするかどうかを設定する
+	SetUseSoftwareMixingSoundFlag	;
+
+	; ------------------------------
+	; 情報取得系関数
+	; ------------------------------
+	GetDSoundObj	; ＤＸライブラリが使用している DirectSound オブジェクトを取得する
+
+;#ifndef DX_NON_BEEP
+	; ------------------------------
+	; BEEP音再生用命令
+	; ------------------------------
+;	SetBeepFrequency	; ビープ音周波数設定関数
+;	PlayBeep			; ビープ音を再生する
+;	StopBeep			; ビープ音を止める
+;#endif
+
+	; ------------------------------
+	; ラッパー関数
+	; ------------------------------
+	PlaySoundFile		; WAVEファイルを再生する
+;??	PlaySound			; PlaySoundFile の旧名称
+	CheckSoundFile		; WAVEファイルの再生中か調べる
+	CheckSound			; CheckSoundFile の旧名称
+	StopSoundFile		; WAVEファイルの再生を止める
+	StopSound			; StopSoundFile の旧名称
+	SetVolumeSoundFile	; WAVEファイルの音量をセットする
+	SetVolumeSound		; SetVolumeSound の旧名称
+
+	; ------------------------------
+	; ソフトウエア制御サウンド系関数
+	; ------------------------------
+	InitSoftSound						; ソフトウエアで扱う波形データをすべて解放する
+	LoadSoftSound						; ソフトウエアで扱う波形データをファイルから作成する
+	LoadSoftSoundFromMemImage			; ソフトウエアで扱う波形データをメモリ上に展開されたファイルイメージから作成する
+	MakeSoftSound						;
+	MakeSoftSound2Ch16Bit44KHz			;
+	MakeSoftSound2Ch16Bit22KHz			;
+	MakeSoftSound2Ch8Bit44KHz			;
+	MakeSoftSound2Ch8Bit22KHz			;
+	MakeSoftSound1Ch16Bit44KHz			;
+	MakeSoftSound1Ch16Bit22KHz			;
+	MakeSoftSound1Ch8Bit44KHz			;
+	MakeSoftSound1Ch8Bit22KHz			;
+	DeleteSoftSound						; ソフトウエアで扱う波形データを解放する
+	SaveSoftSound						; ソフトウエアで扱う波形データを無圧縮Wav形式で保存する
+	GetSoftSoundSampleNum				; ソフトウエアで扱う波形データのサンプル数を取得する
+	GetSoftSoundFormat					; ソフトウエアで扱う波形データのフォーマットを取得する
+	ReadSoftSoundData					; ソフトウエアで扱う波形データのサンプルを読み取る
+	WriteSoftSoundData					; ソフトウエアで扱う波形データのサンプルを書き込む
+	GetSoftSoundDataImage				; ソフトウエアで扱う波形データの波形イメージが格納されているメモリアドレスを取得する
+
+	InitSoftSoundPlayer					; ソフトウエアで扱う波形データのプレイヤーをすべて解放する
+	MakeSoftSoundPlayer					;
+	MakeSoftSoundPlayer2Ch16Bit44KHz	;
+	MakeSoftSoundPlayer2Ch16Bit22KHz	;
+	MakeSoftSoundPlayer2Ch8Bit44KHz		;
+	MakeSoftSoundPlayer2Ch8Bit22KHz		;
+	MakeSoftSoundPlayer1Ch16Bit44KHz	;
+	MakeSoftSoundPlayer1Ch16Bit22KHz	;
+	MakeSoftSoundPlayer1Ch8Bit44KHz		;
+	MakeSoftSoundPlayer1Ch8Bit22KHz		;
+	DeleteSoftSoundPlayer				; ソフトウエアで扱う波形データのプレイヤーを削除する
+	AddDataSoftSoundPlayer				;
+	AddDirectDataSoftSoundPlayer		; ソフトウエアで扱う波形データのプレイヤーにプレイヤーが対応したフォーマットの生波形データを追加する
+	AddOneDataSoftSoundPlayer			; ソフトウエアで扱う波形データのプレイヤーに波形データを一つ追加する
+	GetSoftSoundPlayerFormat			; ソフトウエアで扱う波形データのプレイヤーが扱うデータフォーマットを取得する
+	StartSoftSoundPlayer				; ソフトウエアで扱う波形データのプレイヤーの再生処理を開始する
+	CheckStartSoftSoundPlayer			;
+	StopSoftSoundPlayer					; ソフトウエアで扱う波形データのプレイヤーの再生処理を停止する
+	ResetSoftSoundPlayer				;
+	GetStockDataLengthSoftSoundPlayer	; ソフトウエアで扱う波形データのプレイヤーに追加した波形データでまだ再生用サウンドバッファに転送されていない波形データのサンプル数を取得する
+	CheckSoftSoundPlayerNoneData		;
+
+	; ------------------------------
+	; ＭＩＤＩ制御関数
+	; ------------------------------
+;	AddMusicData			; 新しいＭＩＤＩハンドルを取得する(3.07で消去)
+	DeleteMusicMem			; ＭＩＤＩハンドルを削除する
+	LoadMusicMem			; ＭＩＤＩファイルを読み込む
+	LoadMusicMemByMemImage	; メモリ上に展開されたＭＩＤＩファイルを読み込む
+	LoadMusicMemByResource	; リソース上のＭＩＤＩファイルを読み込む
+	PlayMusicMem			; 読み込んだＭＩＤＩデータの演奏を開始する
+	StopMusicMem			; ＭＩＤＩデータの演奏を停止する
+	CheckMusicMem			; ＭＩＤＩデータが演奏中かどうかを取得する( TRUE:演奏中  FALSE:停止中 )
+	SetVolumeMusicMem		; ＭＩＤＩデータの再生音量をセットする
+	GetMusicMemPosition		; ＭＩＤＩデータの現在の再生位置を取得する
+	InitMusicMem			; ＭＩＤＩデータハンドルをすべて削除する
+	ProcessMusicMem			; ＭＩＤＩデータの周期的処理
+
+	PlayMusic				; ＭＩＤＩファイルを演奏する
+	PlayMusicByMemImage		; メモリ上に展開されているＭＩＤＩファイルを演奏する
+	PlayMusicByResource		; リソースからＭＩＤＩファイルを読み込んで演奏する
+	SetVolumeMusic			; ＭＩＤＩの再生音量をセットする
+	StopMusic				; ＭＩＤＩファイルの演奏停止
+	CheckMusic				; ＭＩＤＩファイルが演奏中か否か情報を取得する
+	GetMusicPosition		; ＭＩＤＩの現在の再生位置を取得する
+
+	SelectMidiMode			; ＭＩＤＩの再生形式をセットする
+
+	; ------------------------------------------------------------
+	;
+	; DxArchive_.cpp 関数 プロトタイプ宣言
+	;
+	; ------------------------------------------------------------
+	DXArchivePreLoad		;
+	DXArchiveCheckIdle		;
+	DXArchiveRelease		; 指定のＤＸＡファイルをメモリから解放する
+	DXArchiveCheckFile		;
+
+	; ------------------------------------------------------------
+	;
+	; DxModel.cpp 関数 プロトタイプ宣言
+	;
+	; ------------------------------------------------------------
+
+;#ifndef DX_NON_MODEL
+
+	; ------------------------------
+	; モデルの読み込み・複製関係
+	; ------------------------------
+;	MV1LoadModel								;
+;	MV1LoadModelFromMem							; メモリ上のモデルファイルイメージと独自の読み込みルーチンを使用してモデルを読み込む
+;	MV1DuplicateModel							;
+;	MV1CreateCloneModel							;
+
+;	MV1DeleteModel								; モデルを削除する
+;	MV1InitModel								; すべてのモデルを削除する
+
+;	MV1SetLoadModelReMakeNormal					;
+;	MV1SetLoadModelReMakeNormalSmoothingAngle	;
+;	MV1SetLoadModelPositionOptimize				;
+;	MV1SetLoadModelUsePhysicsMode				; 読み込むモデルの物理演算モードを設定する
+;	MV1SetLoadModelPhysicsWorldGravity			; 読み込むモデルの物理演算に適用する重力パラメータを設定する
+
+	; ------------------------------
+	; モデル描画関係
+	; ------------------------------
+;	MV1DrawModel		; モデルを描画する
+;	MV1DrawFrame		; モデルの指定のフレームを描画する
+;	MV1DrawMesh			; モデルの指定のメッシュを描画する
+;	MV1DrawTriangleList	; モデルの指定のトライアングルリストを描画する
+;	MV1DrawModelDebug	; モデルのデバッグ描画
+
+	; ------------------------------
+	; 描画設定関係
+	; ------------------------------
+;	MV1SetUseOrigShader	; モデルの描画に SetUseVertexShader, SetUsePixelShader で指定したシェーダーを使用するかどうかを設定する( TRUE:使用する  FALSE:使用しない( デフォルト ) )
+
+	; ------------------------------
+	; モデル基本制御関係
+	; ------------------------------
+;	MV1GetLocalWorldMatrix			; モデルのローカル座標からワールド座標に変換する行列を得る
+;	MV1SetPosition					; モデルの座標をセット
+;	MV1GetPosition					; モデルの座標を取得
+;	MV1SetScale						; モデルの拡大値をセット
+;	MV1GetScale						; モデルの拡大値を取得
+;	MV1SetRotationXYZ	
+;	MV1GetRotationXYZ	
+;	MV1SetRotationZYAxis			; モデルのＺ軸とＹ軸の向きをセットする
+;	MV1SetRotationMatrix			; モデルの回転用行列をセットする
+;	MV1GetRotationMatrix			; モデルの回転用行列を取得する
+;	MV1SetMatrix					; モデルの変形用行列をセットする
+;	MV1GetMatrix					; モデルの変形用行列を取得する
+;	MV1SetVisible					;
+;	MV1GetVisible					;
+;	MV1SetDifColorScale				;
+;	MV1GetDifColorScale				;
+;	MV1SetSpcColorScale				;
+;	MV1GetSpcColorScale				;
+;	MV1SetEmiColorScale				;
+;	MV1GetEmiColorScale				;
+;	MV1SetAmbColorScale				;
+;	MV1GetAmbColorScale				;
+;	MV1GetSemiTransState			;
+;	MV1SetOpacityRate				;
+;	MV1GetOpacityRate				;
+;	MV1SetUseZBuffer				; モデルを描画する際にＺバッファを使用するかどうかを設定する
+;	MV1SetWriteZBuffer				; モデルを描画する際にＺバッファに書き込みを行うかどうかを設定する
+;	MV1SetZBufferCmpType			; モデルの描画時のＺ値の比較モードを設定する
+;	MV1SetZBias						; モデルの描画時の書き込むＺ値のバイアスを設定する
+;	MV1SetUseVertDifColor			;
+;	MV1SetUseVertSpcColor			;
+;	MV1SetSampleFilterMode			;
+;	MV1SetMaxAnisotropy				; モデルの異方性フィルタリングの最大次数を設定する
+;	MV1SetWireFrameDrawFlag			; モデルをワイヤーフレームで描画するかどうかを設定する
+;	MV1RefreshVertColorFromMaterial	; モデルの頂点カラーを現在設定されているマテリアルのカラーにする
+;	MV1PhysicsCalculation			;
+;	MV1PhysicsResetState			;
+
+	; ------------------------------
+	; アニメーション関係
+	; ------------------------------
+;	MV1AttachAnim							;
+;	MV1DetachAnim							; アニメーションをデタッチする
+;	MV1SetAttachAnimTime					; アタッチしているアニメーションの再生時間を設定する
+;	MV1GetAttachAnimTime					; アタッチしているアニメーションの再生時間を取得する
+;	MV1GetAttachAnimTotalTime				; アタッチしているアニメーションの総時間を得る
+;	MV1SetAttachAnimBlendRate				; アタッチしているアニメーションのブレンド率を設定する
+;	MV1GetAttachAnimBlendRate				; アタッチしているアニメーションのブレンド率を取得する
+;	MV1SetAttachAnimBlendRateToFrame		;
+;	MV1GetAttachAnimBlendRateToFrame		;
+;	MV1GetAttachAnim						; アタッチしているアニメーションのアニメーションインデックスを取得する
+
+;	MV1GetAnimNum							; アニメーションの数を取得する
+	
+;	MV1GetAnimIndex							;
+;	MV1GetAnimTotalTime						; 指定番号のアニメーションの総時間を得る
+;	MV1GetAnimTargetFrameNum				; 指定のアニメーションがターゲットとするフレームの数を取得する
+	
+;	MV1GetAnimTargetFrame					; 指定のアニメーションがターゲットとするフレームの番号を取得する
+;	MV1GetAnimTargetFrameKeySetNum			; 指定のアニメーションがターゲットとするフレーム用のアニメーションキーセットの数を取得する
+;	MV1GetAnimTargetFrameKeySet				; 指定のアニメーションがターゲットとするフレーム用のアニメーションキーセットキーセットインデックスを取得する
+
+;	MV1GetAnimKeySetNum						; モデルに含まれるアニメーションキーセットの総数を得る
+;	MV1GetAnimKeySetType					;
+;	MV1GetAnimKeySetDataType				;
+;	MV1GetAnimKeySetTimeType				;
+;	MV1GetAnimKeySetDataNum					; 指定のアニメーションキーセットのキーの数を取得する
+;	MV1GetAnimKeyDataTime					; 指定のアニメーションキーセットのキーの時間を取得する
+;	MV1GetAnimKeyDataToQuaternion			; 指定のアニメーションキーセットのキーを取得する、キータイプが MV1_ANIMKEY_TYPE_QUATERNION では無かった場合は失敗する
+;	MV1GetAnimKeyDataToQuaternionFromTime	;
+;	MV1GetAnimKeyDataToVector				; 指定のアニメーションキーセットのキーを取得する、キータイプが MV1_ANIMKEY_TYPE_VECTOR では無かった場合は失敗する
+;	MV1GetAnimKeyDataToVectorFromTime		;
+;	MV1GetAnimKeyDataToMatrix				; 指定のアニメーションキーセットのキーを取得する、キータイプが MV1_ANIMKEY_TYPE_MATRIX4X4C か MV1_ANIMKEY_TYPE_MATRIX3X3 では無かった場合は失敗する
+;	MV1GetAnimKeyDataToMatrixFromTime		;
+;	MV1GetAnimKeyDataToFlat					; 指定のアニメーションキーセットのキーを取得する、キータイプが MV1_ANIMKEY_TYPE_FLAT では無かった場合は失敗する
+;	MV1GetAnimKeyDataToFlatFromTime			;
+;	MV1GetAnimKeyDataToLinear				; 指定のアニメーションキーセットのキーを取得する、キータイプが MV1_ANIMKEY_TYPE_LINEAR では無かった場合は失敗する
+;	MV1GetAnimKeyDataToLinearFromTime		;
+
+	; ------------------------------
+	; マテリアル関係
+	; ------------------------------
+;	MV1GetMaterialNum					; モデルで使用しているマテリアルの数を取得する
+	
+;	MV1SetMaterialType					;
+;	MV1GetMaterialType					;
+;	MV1SetMaterialDifColor				; 指定のマテリアルのディフューズカラーを設定する
+;	MV1GetMaterialDifColor				; 指定のマテリアルのディフューズカラーを取得する
+;	MV1SetMaterialSpcColor				; 指定のマテリアルのスペキュラカラーを設定する
+;	MV1GetMaterialSpcColor				; 指定のマテリアルのスペキュラカラーを取得する
+;	MV1SetMaterialEmiColor				; 指定のマテリアルのエミッシブカラーを設定する
+;	MV1GetMaterialEmiColor				; 指定のマテリアルのエミッシブカラーを取得する
+;	MV1SetMaterialAmbColor				; 指定のマテリアルのアンビエントカラーを設定する
+;	MV1GetMaterialAmbColor				; 指定のマテリアルのアンビエントカラーを取得する
+;	MV1SetMaterialSpcPower				; 指定のマテリアルのスペキュラの強さを設定する
+;	MV1GetMaterialSpcPower				; 指定のマテリアルのスペキュラの強さを取得する
+;	MV1SetMaterialDifMapTexture			; 指定のマテリアルでディフューズマップとして使用するテクスチャを指定する
+;	MV1GetMaterialDifMapTexture			; 指定のマテリアルでディフューズマップとして使用されているテクスチャのインデックスを取得する
+;	MV1SetMaterialSpcMapTexture			; 指定のマテリアルでスペキュラマップとして使用するテクスチャを指定する
+;	MV1GetMaterialSpcMapTexture			; 指定のマテリアルでスペキュラマップとして使用されているテクスチャのインデックスを取得する
+;	MV1GetMaterialNormalMapTexture		; 指定のマテリアルで法線マップとして使用されているテクスチャのインデックスを取得する
+;	MV1SetMaterialDifGradTexture		; 指定のマテリアルでトゥーンレンダリングのディフューズグラデーションマップとして使用するテクスチャを設定する
+;	MV1GetMaterialDifGradTexture		; 指定のマテリアルでトゥーンレンダリングのディフューズグラデーションマップとして使用するテクスチャを取得する
+;	MV1SetMaterialSpcGradTexture		; 指定のマテリアルでトゥーンレンダリングのスペキュラグラデーションマップとして使用するテクスチャを設定する
+;	MV1GetMaterialSpcGradTexture		; 指定のマテリアルでトゥーンレンダリングのスペキュラグラデーションマップとして使用するテクスチャを取得する
+;	MV1SetMaterialDifGradBlendType		;
+;	MV1GetMaterialDifGradBlendType		;
+;	MV1SetMaterialSpcGradBlendType		;
+;	MV1GetMaterialSpcGradBlendType		;
+;	MV1SetMaterialOutLineWidth			; 指定のマテリアルのトゥーンレンダリングで使用する輪郭線の太さを設定する
+;	MV1GetMaterialOutLineWidth			; 指定のマテリアルのトゥーンレンダリングで使用する輪郭線の太さを取得する
+;	MV1SetMaterialOutLineDotWidth		; 指定のマテリアルのトゥーンレンダリングで使用する輪郭線のドット単位の太さを設定する
+;	MV1GetMaterialOutLineDotWidth		; 指定のマテリアルのトゥーンレンダリングで使用する輪郭線のドット単位の太さを取得する
+;	MV1SetMaterialOutLineColor			; 指定のマテリアルのトゥーンレンダリングで使用する輪郭線の色を設定する
+;	MV1GetMaterialOutLineColor			; 指定のマテリアルのトゥーンレンダリングで使用する輪郭線の色を取得する
+;	MV1SetMaterialDrawBlendMode			;
+;	MV1GetMaterialDrawBlendMode			;
+;	MV1SetMaterialDrawBlendParam		; 指定のマテリアルの描画ブレンドパラメータを設定する
+;	MV1GetMaterialDrawBlendParam		; 指定のマテリアルの描画ブレンドパラメータを設定する
+
+	; ------------------------------
+	; テクスチャ関係
+	; ------------------------------
+;	MV1GetTextureNum						; テクスチャの数を取得
+	
+;	MV1SetTextureColorFilePath				; カラーテクスチャのファイルパスを変更する
+	
+;	MV1SetTextureAlphaFilePath				; アルファテクスチャのファイルパスを変更する
+	
+;	MV1SetTextureGraphHandle				;
+;	MV1GetTextureGraphHandle				; テクスチャのグラフィックハンドルを取得する
+;	MV1SetTextureAddressMode				;
+;	MV1GetTextureAddressModeU				;
+;	MV1GetTextureAddressModeV				;
+;	MV1GetTextureWidth						; テクスチャの幅を取得する
+;	MV1GetTextureHeight						; テクスチャの高さを取得する
+;	MV1GetTextureSemiTransState				;
+;	MV1SetTextureBumpImageFlag				; テクスチャで使用している画像がバンプマップかどうかを設定する
+;	MV1GetTextureBumpImageFlag				;
+;	MV1SetTextureBumpImageNextPixelLength	; バンプマップ画像の場合の隣のピクセルとの距離を設定する
+;	MV1GetTextureBumpImageNextPixelLength	; バンプマップ画像の場合の隣のピクセルとの距離を取得する
+;	MV1SetTextureSampleFilterMode			; テクスチャのフィルタリングモードを設定する
+;	MV1GetTextureSampleFilterMode			;
+;	MV1LoadTexture							;
+
+	; ------------------------------
+	; フレーム関係
+	; ------------------------------
+;	MV1GetFrameNum								; フレームの数を取得する
+;	MV1SearchFrame								;
+;	MV1SearchFrameChild							;
+	
+;	MV1GetFrameParent							;
+;	MV1GetFrameChildNum							;
+;	MV1GetFrameChild							;
+;	MV1GetFramePosition							; 指定のフレームの座標を取得する
+;	MV1GetFrameBaseLocalMatrix					; 指定のフレームの初期状態での座標変換行列を取得する
+;	MV1GetFrameLocalMatrix						; 指定のフレームの座標変換行列を取得する
+;	MV1GetFrameLocalWorldMatrix					; 指定のフレームのローカル座標からワールド座標に変換する行列を得る
+;	MV1SetFrameUserLocalMatrix					; 指定のフレームの座標変換行列を設定する
+;	MV1ResetFrameUserLocalMatrix				; 指定のフレームの座標変換行列をデフォルトに戻す
+;	MV1GetFrameMaxVertexLocalPosition			; 指定のフレームが持つメッシュ頂点のローカル座標での最大値を得る
+;	MV1GetFrameMinVertexLocalPosition			; 指定のフレームが持つメッシュ頂点のローカル座標での最小値を得る
+;	MV1GetFrameAvgVertexLocalPosition			; 指定のフレームが持つメッシュ頂点のローカル座標での平均値を得る
+;	MV1GetFrameTriangleNum						; 指定のフレームに含まれるポリゴンの数を取得する
+;	MV1GetFrameMeshNum							; 指定のフレームが持つメッシュの数を取得する
+;	MV1GetFrameMesh								; 指定のフレームが持つメッシュのメッシュインデックスを取得する
+;	MV1SetFrameVisible							;
+;	MV1GetFrameVisible							;
+;	MV1SetFrameDifColorScale					;
+;	MV1SetFrameSpcColorScale					;
+;	MV1SetFrameEmiColorScale					;
+;	MV1SetFrameAmbColorScale					;
+;	MV1GetFrameDifColorScale					;
+;	MV1GetFrameSpcColorScale					;
+;	MV1GetFrameEmiColorScale					;
+;	MV1GetFrameAmbColorScale					;
+;	MV1GetFrameSemiTransState					;
+;	MV1SetFrameOpacityRate						;
+;	MV1GetFrameOpacityRate						;
+;	MV1SetFrameBaseVisible						;
+;	MV1GetFrameBaseVisible						;
+;	MV1SetFrameTextureAddressTransform			; 指定のフレームのテクスチャ座標変換パラメータを設定する
+;	MV1SetFrameTextureAddressTransformMatrix	; 指定のフレームのテクスチャ座標変換行列をセットする
+;	MV1ResetFrameTextureAddressTransform		; 指定のフレームのテクスチャ座標変換パラメータをリセットする
+
+	; ------------------------------
+	; メッシュ関係
+	; ------------------------------
+;	MV1GetMeshNum				; モデルに含まれるメッシュの数を取得する
+;	MV1GetMeshMaterial			; 指定メッシュが使用しているマテリアルのインデックスを取得する
+;	MV1GetMeshTriangleNum		; 指定メッシュに含まれる三角形ポリゴンの数を取得する
+;	MV1SetMeshVisible			;
+;	MV1GetMeshVisible			;
+;	MV1SetMeshDifColorScale		;
+;	MV1SetMeshSpcColorScale		;
+;	MV1SetMeshEmiColorScale		;
+;	MV1SetMeshAmbColorScale		;
+;	MV1GetMeshDifColorScale		;
+;	MV1GetMeshSpcColorScale		;
+;	MV1GetMeshEmiColorScale		;
+;	MV1GetMeshAmbColorScale		;
+;	MV1SetMeshOpacityRate		;
+;	MV1GetMeshOpacityRate		;
+;	MV1SetMeshDrawBlendMode		;
+;	MV1SetMeshDrawBlendParam	; 指定のメッシュの描画ブレンドパラメータを設定する
+;	MV1GetMeshDrawBlendMode		;
+;	MV1GetMeshDrawBlendParam	; 指定のメッシュの描画ブレンドパラメータを設定する
+;	MV1SetMeshBaseVisible		;
+;	MV1GetMeshBaseVisible		;
+;	MV1SetMeshBackCulling		;
+;	MV1GetMeshBackCulling		;
+;	MV1GetMeshMaxPosition		; 指定のメッシュに含まれるポリゴンの最大ローカル座標を取得する
+;	MV1GetMeshMinPosition		; 指定のメッシュに含まれるポリゴンの最小ローカル座標を取得する
+;	MV1GetMeshTListNum			; 指定のメッシュに含まれるトライアングルリストの数を取得する
+;	MV1GetMeshTList				; 指定のメッシュに含まれるトライアングルリストのインデックスを取得する
+;	MV1GetMeshSemiTransState	;
+;	MV1SetMeshUseVertDifColor	;
+;	MV1SetMeshUseVertSpcColor	;
+;	MV1GetMeshUseVertDifColor	;
+;	MV1GetMeshUseVertSpcColor	;
+
+	; ------------------------------
+	; トライアングルリスト関係
+	; ------------------------------
+;	MV1GetTriangleListNum			; トライアングルリストの数を取得する
+;	MV1GetTriangleListVertexType	; 指定のトライアングルリストの頂点データタイプを取得する( MV1_VERTEX_TYPE_NORMAL 等 )
+;	MV1GetTriangleListPolygonNum	; 指定のトライアングルリストに含まれるポリゴンの数を取得する
+;	MV1GetTriangleListVertexNum		; 指定のトライアングルリストに含まれる頂点データの数を取得する
+
+	; ------------------------------
+	; コリジョン関係
+	; ------------------------------
+;	MV1SetupCollInfo				; コリジョン情報を構築する
+;	MV1TerminateCollInfo			; コリジョン情報の後始末
+;	MV1RefreshCollInfo				; コリジョン情報を更新する
+;	MV1CollCheck_Line				; 線とモデルの当たり判定
+;	MV1CollCheck_LineDim			; 線とモデルの当たり判定( 戻り値が MV1_COLL_RESULT_POLY_DIM )
+;	MV1CollCheck_Sphere				; 球とモデルの当たり判定
+;	MV1CollCheck_Capsule			; カプセルとモデルの当たり判定
+;	MV1CollCheck_GetResultPoly		; コリジョン結果ポリゴン配列から指定番号のポリゴン情報を取得する
+;	MV1CollResultPolyDimTerminate	; コリジョン結果ポリゴン配列の後始末をする
+
+	; ------------------------------
+	; 参照用メッシュ関係
+	; ------------------------------
+;	MV1SetupReferenceMesh			; 参照用メッシュのセットアップ
+;	MV1TerminateReferenceMesh		; 参照用メッシュの後始末
+;	MV1RefreshReferenceMesh			; 参照用メッシュの更新
+;	MV1GetReferenceMesh				; 参照用メッシュを取得する
+
+;#endif
+
+;#define DX_FUNCTION_END
